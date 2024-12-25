@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import 'uikit/dist/js/uikit';
+  import { ClientConfig } from './api';
   import Faq from './faq.svelte';
   import Instruction from './instruction.svelte';
 
@@ -8,10 +9,6 @@
 
   onMount(() => {
       hash = parseHash();
-
-      if (!hash) {
-          quit();
-      }
   });
 
   const parseHash = function(): string {
@@ -22,34 +19,37 @@
       }
       return parseHash.value;
   };
-
-  const quit = function () {
-      window.location.href = '/';
-  };
 </script>
 
 <svelte:head>
-  <title>ВПН</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </svelte:head>
 
-<div class="uk-section uk-section-default">
-  <div class="uk-container">
-      <div class="uk-text-bold uk-text-center uk-grid-match uk-child-width-1-2@m" uk-grid>
-        <div class="uk-text-primary">Если ты читаешь этот текст, то у тебя есть персональный ВПН.</div>
-        <div class="uk-text-danger">Эта ссылка — персональная, не публикуй её в интернете и не передавай её другим людям.</div>
-      </div>
+{#await ClientConfig.fetch(hash)}
+  <div uk-spinner></div>
+{:then config}
+  <div class="uk-section uk-section-default">
+    <div class="uk-container">
+        <div class="uk-text-bold uk-text-center uk-grid-match uk-child-width-1-2@m" uk-grid>
+          <div class="uk-text-primary">Если ты читаешь этот текст, то у тебя есть персональный ВПН.</div>
+          <div class="uk-text-danger">Эта ссылка — персональная, не публикуй её в интернете и не передавай её другим людям.</div>
+        </div>
+    </div>
   </div>
-</div>
 
-<div class="uk-section uk-section-muted">
-  <div class="uk-container">
-    <Instruction uuid={hash}/>
+  <div class="uk-section uk-section-muted">
+    <div class="uk-container">
+      <Instruction config={config}/>
+    </div>
   </div>
-</div>
 
-<div class="uk-section uk-section-primary uk-light">
-  <div class="uk-container">
-    <Faq/>
+  <div class="uk-section uk-section-primary uk-light">
+    <div class="uk-container">
+      <Faq/>
+    </div>
   </div>
-</div>
+{:catch}
+  <script>
+    window.location.href = '/';
+  </script>
+{/await}

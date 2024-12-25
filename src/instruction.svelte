@@ -1,15 +1,14 @@
 <script lang="ts">
+    import type { ClientConfig } from './api';
+
     interface Props {
-        uuid: string;
+        config: ClientConfig
     }
 
-    let { uuid }: Props = $props();
-
-    let subscriptionUrl = $derived(`https://${location.host}/${uuid}`);
-    let hiddifyUrl = $derived(`hiddify://import/${subscriptionUrl}`);
+    let { config }: Props = $props();
 
     const onConnectClick = function(): void {
-        window.location.href = hiddifyUrl;
+        window.location.href = config.hiddifyOpenUrl;
     };
 </script>
 
@@ -57,7 +56,7 @@
             Если кнопка не работает, скопируй текст ниже и вставь его в Hiddify:
         </p>
         <p class="uk-text-center">
-            <code>{subscriptionUrl}</code>
+            <code>{config.hiddifySubscriptionUrl}</code>
         </p>
     </div>
 </div>
