@@ -15,7 +15,7 @@
 <h1 class="uk-margin-large-bottom">Итак, как подключить впн:</h1>
 <div class="uk-child-width-1-3@m" uk-grid>
     <div>
-        <h3>1. Скачай приложение <b>Hiddify</b>:</h3>
+        <h3>Шаг 1: скачай Приложение <b>Hiddify</b>:</h3>
         <div>
             <a href="https://apps.apple.com/us/app/hiddify-proxy-vpn/id6596777532" target="_blank">
                 <img class="download-link" src="https://developer.apple.com/app-store/marketing/guidelines/images/badge-example-preferred_2x.png"/>
@@ -32,7 +32,7 @@
         </div>
     </div>
     <div>
-        <h3>2. Выключи проксирование на <b>российские</b> ресурсы</h3>
+        <h3>Шаг 2: выключи проксирование на <b>российские</b> ресурсы</h3>
         <p class="uk-text-italic uk-text-small uk-text-muted">...чтобы не включать и выключать впн каждый раз</p>
         <ol>
             <li>Открой <b>Hiddify</b></li>
@@ -44,7 +44,7 @@
         </ol>
     </div>
     <div>
-        <h3>3. <b>Подключи ВПН</b></h3>
+        <h3>Шаг 3: <b>подключи ВПН</b></h3>
         <p>
             Нажми на кнопку <b>Подключить ВПН</b> внизу.<br/>
             Откроется приложение, должно выскочить зеленое уведомление, что ВПН добавлен.
