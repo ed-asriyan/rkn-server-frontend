@@ -3,10 +3,10 @@
     import { Config, Database } from './database';
 
     interface Props {
-        uuid: string;
+        database: Database;
     }
 
-    let { uuid }: Props = $props();
+    let { database }: Props = $props();
 
     const responseMap: {[x: number]: string } = {
         0: 'Новый ВПН создан. Найди его в списке ниже на последней строчке и поделись с человеком',
@@ -48,6 +48,7 @@
         input.select();
         document.execCommand('copy');
         document.body.removeChild(input);
+        UIkit.notification('Ссылка скопирована', { status: 'success' });
     };
 
     const canShare: boolean = Boolean(navigator.share);
@@ -59,8 +60,11 @@
             });
         } else {
             copyToClipboard(url);
-            UIkit.notification('Ссылка скопирована', { status: 'success' });
         }
+    };
+
+    const generateShareLink = function (uuid: string): string {
+        return `https://${location.host}#${uuid}`;
     };
 
     const rename = async function (database: Database, config: Config): Promise<void> {
@@ -80,75 +84,71 @@
 </script>
 
 <h2>👥 Сгенерировать ВПН для друзей и знакомых</h2>
-{#await Database.connect(uuid)}
-    <div uk-spinner></div>
-{:then database}
-    <p>Ты можешь ты можешь поделиться ВПНом с друзьями. Для этого</p>
-    <ol>
-        <li>
-            <b>Нажми</b> на кнопку:&nbsp;
-            <span>
-                {#if loading}
-                    <span uk-spinner></span>
-                {:else}
-                    <button class="uk-widt1 uk-button uk-button-small uk-button-primary" onclick={() => adoptClick(database)}>🔄 Сгенерировать 1 новый ключ</button>
-                {/if}
-            </span>
-            </li>
-        <li><b>Скопируй</b> cамую последнюю ссылку из списка</li>
-        <li><b>Поделись</b> ею с только с одним человеком через личные сообщения</li>
-    </ol>
-    <p>Правила:</p>
-    <ul>
-        <li>Если одним ВПНом будут пользоваться несколько людей, он будет <b>заблокирован</b></li>
-        <li>Если ВПНом не будут пользоваться более одного <b>месяца</b>, он может быть <b>отключён</b></li>
-    </ul>
-    <hr/>
-    {#key key}
-        {#await database.fetchChildren()}
-            <div uk-spinner></div>
-        {:then { children, count }} 
-            <p class="uk-text-center uk-text-bold">
-                {#if children.length > 0}
-                    Всего ты сгенерировал(а) {count} ВПН
-                {:else}
-                    Ты ещё не сгенерировал(а) ни одного ВПН
-                {/if}
-                </p>
-            {#if children.length > 0}
-                <table class="uk-table uk-table-small">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Имя (нажми на него, чтобы скопировать ссылку и поделиться)</th>
-                            <th>Дата пригашения</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {#each children.sort((a, b) => +a.createdAt - +b.createdAt) as child, i}
-                            <tr>
-                                <th>{i + 1}</th>
-                                <td>
-                                    <button class="uk-button uk-button-default uk-button-small" uk-tooltip="Переименовать" onclick={() => rename(database, child)}>✍🏻</button>
-                                    &nbsp;
-                                    <span class="uk-link" uk-tooltip="Нажми, чтобы скопировать" onclick={() => linkClick(`https://${location.host}#${child.childUuid}`)}>{child.name || child.childUuid} <img width="12" height="12" src="https://img.icons8.com/a7a7a7/material-sharp/24/copy.png" alt="copy--v1"/></span>
-                                </td>
-                                <td>{child.createdAt.toLocaleString()}</td>
-                            </tr>
-                        {/each}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
+<p>Ты можешь ты можешь поделиться ВПНом с друзьями. Для этого</p>
+<ol>
+    <li>
+        <b>Нажми</b> на кнопку:&nbsp;
+        <span>
+            {#if loading}
+                <span uk-spinner></span>
+            {:else}
+                <button class="uk-widt1 uk-button uk-button-small uk-button-primary" onclick={() => adoptClick(database)}>🔄 Сгенерировать 1 новый ключ</button>
             {/if}
-        {:catch e}
-            <div>Ошибка :(</div>
-            <button class="uk-button uk-button-primary" onclick={refresh}>Обновить</button>
-        {/await}
-    {/key}
-{:catch e}
-    <div>Ошибка :(</div>
-{/await}
+        </span>
+        </li>
+    <li><b>Скопируй</b> cамую последнюю ссылку из списка</li>
+    <li><b>Поделись</b> ею с только с одним человеком через личные сообщения</li>
+</ol>
+<p>Правила:</p>
+<ul>
+    <li>Если одним ВПНом будут пользоваться несколько людей, он будет <b>заблокирован</b></li>
+    <li>Если ВПНом не будут пользоваться более одного <b>месяца</b>, он может быть <b>отключён</b></li>
+</ul>
+<hr/>
+{#key key}
+    {#await database.fetchChildren()}
+        <div uk-spinner></div>
+    {:then { children, count }} 
+        <p class="uk-text-center uk-text-bold">
+            {#if children.length > 0}
+                Всего ты сгенерировал(а) {count} ВПН
+            {:else}
+                Ты ещё не сгенерировал(а) ни одного ВПН
+            {/if}
+            </p>
+        {#if children.length > 0}
+            <table class="uk-table uk-table-small">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Имя (нажми на него, чтобы скопировать ссылку и поделиться)</th>
+                        <th>Дата пригашения</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {#each children.sort((a, b) => +a.createdAt - +b.createdAt) as child, i}
+                        <tr>
+                            <th>{i + 1}</th>
+                            <td>
+                                <button class="uk-button uk-button-default uk-button-small" uk-tooltip="Переименовать" onclick={() => rename(database, child)}>✍🏻</button>
+                                &nbsp;
+                                <button class="uk-button uk-button-default uk-button-small" uk-tooltip="Скопировать" onclick={() => linkClick(generateShareLink(child.childUuid))}>📄</button>
+                                &nbsp;
+                                <span class="uk-link" uk-tooltip="Нажми, чтобы скопировать" onclick={() => linkClick(generateShareLink(child.childUuid))}>{child.name || child.childUuid} <img width="12" height="12" src="https://img.icons8.com/a7a7a7/material-sharp/24/copy.png" alt="copy--v1"/></span>
+                            </td>
+                            <td>{child.createdAt.toLocaleString()}</td>
+                        </tr>
+                    {/each}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        {/if}
+    {:catch e}
+        <div>Ошибка :(</div>
+        <button class="uk-button uk-button-primary" onclick={refresh}>Обновить</button>
+    {/await}
+{/key}

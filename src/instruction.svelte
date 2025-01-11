@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { ClientConfig } from './api';
+    import type { Config } from './database';
 
     interface Props {
-        config: ClientConfig
+        config: Config
     }
 
     let { config }: Props = $props();

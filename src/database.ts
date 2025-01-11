@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { supabaseKey, supabaseUrl } from './settings';
 
 
-export class Config {
+export class User {
     childUuid: string;
     parentUuid: string;
     createdAt: Date;
@@ -16,32 +16,46 @@ export class Config {
     }
 }
 
+export class Config {
+    uuid: string;
+    hiddifyOpenUrl: string;
+    hiddifySubscriptionUrl: string;
+
+    constructor(data: any) {
+        this.uuid = data['uuid'];
+        this.hiddifyOpenUrl = `https://${location.host}/${this.uuid}/hiddify`;
+        this.hiddifySubscriptionUrl = `hiddify://import/${this.hiddifyOpenUrl}`;
+    }
+}
+
 export class Database {
     private supabase: ReturnType<typeof createClient>;
     private uuid: string;
+    isPasswordSetupNeeded: boolean;
     
-    constructor(supabase: ReturnType<typeof createClient>, uuid: string) {
+    constructor(supabase: ReturnType<typeof createClient>, uuid: string, isPasswordSetupNeeded: boolean) {
         this.supabase = supabase;
         this.uuid = uuid;
+        this.isPasswordSetupNeeded = isPasswordSetupNeeded;
     }
 
-    static async connect(uuid: string): Promise<Database> {
+    static async connect(uuid: string, password: string): Promise<Database> {
         const supabase = createClient<Database>(supabaseUrl, supabaseKey);
+        await supabase.auth.signOut({ scope: 'local' });
         await supabase.auth.signInWithPassword({
             email: `${uuid}@example.com`,
-            password: uuid,
+            password,
         });
-        return new Database(supabase, uuid);
+        return new Database(supabase, (await supabase.auth.getUser()).data.user.id, password === uuid);
     }
 
-    async fetchChildren(): Promise<{ children: Config[], count: number }> {
+    async fetchChildren(): Promise<{ children: User[], count: number }> {
         const { data, error, count } = await this.supabase.from('users').select('*', { count: 'exact' });
-        console.log(data);
         if (error) {
             throw error;
         }
         return {
-            children: data.map(rawValue => new Config(rawValue)),
+            children: data.map(rawValue => new User(rawValue)),
             count,
         };
     }
@@ -61,5 +75,21 @@ export class Database {
         if (error) {
             throw error;
         }
+    }
+
+    async changePassword(password: string): Promise<void> {
+        const { error } = await this.supabase.auth.updateUser({ password });
+        if (error) {
+            throw error;
+        }
+        this.isPasswordSetupNeeded = password === this.uuid;
+    }
+
+    async fetchConfig(): Promise<Config> {
+        const { data, error } = await this.supabase.from('configs').select('*').single();
+        if (error) {
+            throw error;
+        }
+        return new Config(data);
     }
 }
