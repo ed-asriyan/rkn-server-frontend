@@ -25,11 +25,11 @@
         return await Database.connect(hash, savedPassword);
       } catch (e) {
       }
-    } else {
-      try {
-        return await Database.connect(hash, hash);
-      } catch (e) {
-      }
+    }
+
+    try {
+      return await Database.connect(hash, hash);
+    } catch (e) {
     }
 
     while (true) {

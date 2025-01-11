@@ -23,8 +23,8 @@ export class Config {
 
     constructor(data: any) {
         this.uuid = data['uuid'];
-        this.hiddifyOpenUrl = `https://${location.host}/${this.uuid}/hiddify`;
-        this.hiddifySubscriptionUrl = `hiddify://import/${this.hiddifyOpenUrl}`;
+        this.hiddifySubscriptionUrl = `https://${location.host}/${this.uuid}/hiddify`;
+        this.hiddifyOpenUrl = `hiddify://import/${this.hiddifySubscriptionUrl}`;
     }
 }
 
