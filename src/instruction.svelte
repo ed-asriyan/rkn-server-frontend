@@ -50,7 +50,7 @@
             Откроется приложение, должно выскочить зеленое уведомление, что ВПН добавлен.
         </p>
         <div class="uk-text-center">
-            <button class="uk-button uk-button-primary uk-button-large" onclick={onConnectClick}><b>Подключить ВПН</b></button>
+            <button class="uk-button uk-button-secondary uk-button-large" onclick={onConnectClick}><b>Подключить ВПН</b></button>
         </div>
         <p>
             Если кнопка не работает, скопируй текст ниже и вставь его в Hiddify:

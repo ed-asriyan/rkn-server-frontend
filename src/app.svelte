@@ -4,6 +4,7 @@
   import { ClientConfig } from './api';
   import Faq from './faq.svelte';
   import Instruction from './instruction.svelte';
+  import AdoptedKeys from './adopted-keys.svelte';
 
   let hash: string = $state('');
 
@@ -40,6 +41,12 @@
   <div class="uk-section uk-section-muted">
     <div class="uk-container">
       <Instruction config={config}/>
+    </div>
+  </div>
+
+  <div class="uk-section uk-section-secondary">
+    <div class="uk-container">
+      <AdoptedKeys uuid={hash}/>
     </div>
   </div>
 
