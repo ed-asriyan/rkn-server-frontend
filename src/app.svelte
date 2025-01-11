@@ -5,6 +5,7 @@
   import Faq from './faq.svelte';
   import Instruction from './instruction.svelte';
   import AdoptedKeys from './adopted-keys.svelte';
+  import Consent from './consent.svelte';
 
   let hash: string = $state('');
 
@@ -29,15 +30,7 @@
 {#await ClientConfig.fetch(hash)}
   <div uk-spinner></div>
 {:then config}
-  <div class="uk-section uk-section-default">
-    <div class="uk-container">
-        <div class="uk-text-bold uk-text-center uk-grid-match uk-child-width-1-2@m" uk-grid>
-          <div class="uk-text-primary">Если ты читаешь этот текст, то у тебя есть персональный ВПН.</div>
-          <div class="uk-text-danger">Эта ссылка — персональная, не публикуй её в интернете и не передавай её другим людям.</div>
-        </div>
-    </div>
-  </div>
-
+  <Consent />
   <div class="uk-section uk-section-muted">
     <div class="uk-container">
       <Instruction config={config}/>
