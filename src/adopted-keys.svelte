@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
-    import { Database } from './database';
+    import { Config, Database } from './database';
 
     interface Props {
         uuid: string;
@@ -19,10 +19,13 @@
     const adoptClick = async function(database: Database): Promise<void> {
         try {
             loading = true;
-            const code = await database.adopt();
-            const message = responseMap[code];
-            if (message) {
-                alert(message);
+            const name = prompt('Введите имя для нового ВПН (имя будет видно только вам):');
+            if (name) {
+                const code = await database.adopt(name);
+                const message = responseMap[code];
+                if (message) {
+                    alert(message);
+                }
             }
         } catch (e) {
             console.error(e);
@@ -57,6 +60,21 @@
         } else {
             copyToClipboard(url);
             UIkit.notification('Ссылка скопирована', { status: 'success' });
+        }
+    };
+
+    const rename = async function (database: Database, config: Config): Promise<void> {
+        try {
+            const newName = prompt('Введите новое имя:', );
+            if (newName) {
+                await database.renameConfig(config.childUuid, newName);
+                UIkit.notification('Имя изменено', { status: 'success' });
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Ошибка');
+        } finally {
+            refresh();
         }
     };
 </script>
@@ -102,7 +120,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Ссылка на прилашение (нажми на неё, чтобы скопировать)</th>
+                            <th>Имя (нажми на него, чтобы скопировать ссылку и поделиться)</th>
                             <th>Дата пригашения</th>
                         </tr>
                     </thead>
@@ -110,7 +128,11 @@
                         {#each children.sort((a, b) => +a.createdAt - +b.createdAt) as child, i}
                             <tr>
                                 <th>{i + 1}</th>
-                                <td class="uk-link" onclick={() => linkClick(`https://${location.host}#${child.childUuid}`)}>{child.childUuid} <img width="12" height="12" src="https://img.icons8.com/a7a7a7/material-sharp/24/copy.png" alt="copy--v1"/></td>
+                                <td>
+                                    <button class="uk-button uk-button-default uk-button-small" uk-tooltip="Переименовать" onclick={() => rename(database, child)}>✍🏻</button>
+                                    &nbsp;
+                                    <span class="uk-link" uk-tooltip="Нажми, чтобы скопировать" onclick={() => linkClick(`https://${location.host}#${child.childUuid}`)}>{child.name || child.childUuid} <img width="12" height="12" src="https://img.icons8.com/a7a7a7/material-sharp/24/copy.png" alt="copy--v1"/></span>
+                                </td>
                                 <td>{child.createdAt.toLocaleString()}</td>
                             </tr>
                         {/each}

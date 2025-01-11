@@ -6,11 +6,13 @@ export class Config {
     childUuid: string;
     parentUuid: string;
     createdAt: Date;
+    name: string;
 
     constructor(data: any) {
         this.childUuid = data['child_uuid'];
         this.parentUuid = data['parent_uuid'];
         this.createdAt = new Date(data['created_at']);
+        this.name = data['name'];
     }
 }
 
@@ -33,7 +35,7 @@ export class Database {
     }
 
     async fetchChildren(): Promise<{ children: Config[], count: number }> {
-        const { data, error, count } = await this.supabase.from('user_to_user').select('*', { count: 'exact' });
+        const { data, error, count } = await this.supabase.from('users').select('*', { count: 'exact' });
         console.log(data);
         if (error) {
             throw error;
@@ -44,13 +46,20 @@ export class Database {
         };
     }
 
-    async adopt(): Promise<number> {
+    async adopt(name: string): Promise<number> {
         const { data, error } = await this.supabase.functions.invoke('adopt', {
-            body: { parentUuid: this.uuid }
+            body: { parentUuid: this.uuid, name }
         });
         if (error) {
             throw error;
         }
         return data.code;
-    };
+    }
+
+    async renameConfig(childUuid: string, name: string): Promise<void> {
+        const { error } = await this.supabase.from('users').update({ name }).eq('child_uuid', childUuid);
+        if (error) {
+            throw error;
+        }
+    }
 }
