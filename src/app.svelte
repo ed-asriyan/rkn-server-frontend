@@ -56,8 +56,8 @@
   <div uk-spinner></div>
 {:then database}
   <Consent />
-  <div class="uk-section uk-section-muted">
-    <div class="uk-container">
+  <div class="uk-section uk-section-muted uk-padding-remote-top">
+    <div class="uk-container uk-container-xsmall">
       <ChangePassword database={database}/>
       {#await database.fetchConfig()}
       <br/>
@@ -69,7 +69,7 @@
   </div>
 
   <div class="uk-section uk-section-secondary">
-    <div class="uk-container">
+    <div class="uk-container uk-container-xsmall">
       <AdoptedKeys database={database}/>
     </div>
   </div>

@@ -117,9 +117,7 @@
 
 <style lang="scss">
     table {
-        // width: 100vw !important;
         max-width: 100vw;
         overflow-x: scroll;
-
     }
 </style>

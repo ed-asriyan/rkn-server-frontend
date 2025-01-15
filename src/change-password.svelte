@@ -44,8 +44,9 @@
     };
 </script>
 
-<button class="uk-button uk-button-secondary" onclick={() => UIkit.modal(modal).show()}>Сменить пароль</button>
-
+<div class="uk-text-center uk-margin-bottom">
+    <button class="uk-button uk-button-default" onclick={() => UIkit.modal(modal).show()}>🔐 Сменить пароль</button>
+</div>
 <div bind:this={modal} uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
         <h2 class="uk-modal-title">Сменить пароль</h2>
