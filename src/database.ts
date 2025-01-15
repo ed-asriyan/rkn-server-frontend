@@ -27,6 +27,15 @@ export class VpnConfig {
     }
 }
 
+export class AdoptError extends Error {
+    code: number;
+
+    constructor(code: number) {
+        super();
+        this.code = code;
+    }
+}
+
 export class Database {
     private supabase: ReturnType<typeof createClient>;
     private uuid: string;
@@ -61,14 +70,18 @@ export class Database {
         };
     }
 
-    async adopt(name: string): Promise<number> {
+    async adopt(name: string): Promise<User> {
         const { data, error } = await this.supabase.functions.invoke('adopt', {
             body: { parentUuid: this.uuid, name }
         });
         if (error) {
             throw error;
         }
-        return data.code;
+        if (data.code === 0) {
+            return new User(data.data);
+        } else {
+            throw new AdoptError(data.code);
+        }
     }
 
     async renameConfig(childUuid: string, name: string): Promise<void> {

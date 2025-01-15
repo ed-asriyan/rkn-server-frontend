@@ -2,7 +2,7 @@
   import 'uikit/dist/js/uikit';
   import Faq from './faq.svelte';
   import Instruction from './instruction.svelte';
-  import AdoptedKeys from './adopted-keys.svelte';
+  import AdoptedKeys from './children/index.svelte';
   import Consent from './consent.svelte';
   import { Database } from './database';
   import ChangePassword from './change-password.svelte';
