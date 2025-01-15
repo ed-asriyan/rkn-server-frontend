@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-
+import type { Config } from './config';
 
 export class User {
     childUuid: string;
@@ -15,12 +15,7 @@ export class User {
     }
 }
 
-const fetchConfig = async (): Promise<{ supabaseUrl: string, supabaseKey: string }> => {
-    const response = await fetch('config.json');
-    return response.json();
-};
-
-export class Config {
+export class VpnConfig {
     uuid: string;
     hiddifyOpenUrl: string;
     hiddifySubscriptionUrl: string;
@@ -43,8 +38,8 @@ export class Database {
         this.isPasswordSetupNeeded = isPasswordSetupNeeded;
     }
 
-    static async connect(uuid: string, password: string): Promise<Database> {
-        const { supabaseUrl, supabaseKey } = await fetchConfig();
+    static async connect(config: Config, uuid: string, password: string): Promise<Database> {
+        const { supabaseUrl, supabaseKey } = config;
 
         const supabase = createClient<Database>(supabaseUrl, supabaseKey);
         await supabase.auth.signOut({ scope: 'local' });
@@ -91,11 +86,11 @@ export class Database {
         this.isPasswordSetupNeeded = password === this.uuid;
     }
 
-    async fetchConfig(): Promise<Config> {
+    async fetchConfig(): Promise<VpnConfig> {
         const { data, error } = await this.supabase.from('configs').select('*').single();
         if (error) {
             throw error;
         }
-        return new Config(data);
+        return new VpnConfig(data);
     }
 }

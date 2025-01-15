@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
-    import { Config, Database } from './database';
+    import { VpnConfig, Database } from './database';
 
     interface Props {
         database: Database;
@@ -67,7 +67,7 @@
         return `https://${location.host}#${uuid}`;
     };
 
-    const rename = async function (database: Database, config: Config): Promise<void> {
+    const rename = async function (database: Database, config: VpnConfig): Promise<void> {
         try {
             const newName = prompt('Введите новое имя:', config.name);
             if (newName) {

@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { Config } from './database';
+    import type { VpnConfig } from './database';
 
     interface Props {
-        config: Config
+        config: VpnConfig
     }
 
     let { config }: Props = $props();

@@ -6,6 +6,7 @@
   import Consent from './consent.svelte';
   import { Database } from './database';
   import ChangePassword from './change-password.svelte';
+  import { fetchConfig } from './config';
 
   const parseHash = function(): string {
       if (!parseHash.value) {
@@ -17,26 +18,28 @@
   };
 
   const connect = async function(): Promise<Database> {
+    const config = await fetchConfig();
     const hash = parseHash();
 
     const savedPassword = localStorage.getItem('password');
     if (savedPassword) {
       try {
-        return await Database.connect(hash, savedPassword);
+        return await Database.connect(config, hash, savedPassword);
       } catch (e) {
       }
     }
 
     try {
-      return await Database.connect(hash, hash);
+      return await Database.connect(config, hash, hash);
     } catch (e) {
     }
 
-    while (true) {
-      const password = prompt('Введите пароль:');
+
+    for (let i = 0; i < 3; i++) {
+      const password: string = prompt('Введите пароль:');
       localStorage.setItem('password', password);
       try {
-        return await Database.connect(hash, password);
+        return await Database.connect(config, hash, password);
       } catch (e) {
         alert('Неверный пароль');
       }
