@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import { supabaseKey, supabaseUrl } from './settings';
 
 
 export class User {
@@ -15,6 +14,11 @@ export class User {
         this.name = data['name'];
     }
 }
+
+const fetchConfig = async (): Promise<{ supabaseUrl: string, supabaseKey: string }> => {
+    const response = await fetch('config.json');
+    return response.json();
+};
 
 export class Config {
     uuid: string;
@@ -40,6 +44,8 @@ export class Database {
     }
 
     static async connect(uuid: string, password: string): Promise<Database> {
+        const { supabaseUrl, supabaseKey } = await fetchConfig();
+
         const supabase = createClient<Database>(supabaseUrl, supabaseKey);
         await supabase.auth.signOut({ scope: 'local' });
         await supabase.auth.signInWithPassword({

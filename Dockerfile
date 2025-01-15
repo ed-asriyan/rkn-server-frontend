@@ -21,8 +21,6 @@ COPY src src
 
 FROM base as builder
 ARG NODE_ENV
-ARG VITE_SUPABASE_URL
-ARG VITE_SUPABASE_KEY
 
 RUN npm run build -- --mode $NODE_ENV
 

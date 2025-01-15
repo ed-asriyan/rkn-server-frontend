@@ -24,10 +24,4 @@ make prod_build_bundle
 ```
 
 ## GitHub Actions
-### Initial setup
-Create two repositor secrets:
-* `VITE_SUPABASE_URL` -  find the values below in Supabase project -> Settings -> API (do not forget to add `/rest/v1/` suffix)
-* `VITE_SUPABASE_KEY` - public key
-
-### Release
-Will automatically create release after each git tag push. Download the latest version at [https://github.com/ed-asriyan/xray-server-frontend/releases/latest/download/index.html](https://github.com/ed-asriyan/xray-server-frontend/releases/latest/download/index.html)
+Github will automatically create release after each git tag push. Download the latest version at [https://github.com/ed-asriyan/xray-server-frontend/releases/latest/download/index.html](https://github.com/ed-asriyan/xray-server-frontend/releases/latest/download/index.html)
