@@ -13,18 +13,24 @@
     };
 
     let accordion: HTMLElement;
+    let accourdionList: HTMLElement[] = [];
+
+    const onSwitchAccorion = function(index: number): void {
+        UIkit.accordion(accordion).toggle(index);
+        if (window.innerWidth < 768) {
+            accourdionList[index - 1]?.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 </script>
 
 <div class="uk-padding uk-card uk-card-default uk-card-body">
-    <h1 class="uk-card-title">Как подключиться?</h1>
-    Это займет не более 30 секунд!
     <ul uk-accordion bind:this={accordion}>
-        <li class="uk-open">
+        <li bind:this={accourdionList[0]} class="uk-open">
             <a class="uk-accordion-title" href>Шаг 1: Скачай <b>Hiddify</b></a>
             <div class="uk-accordion-content">
                 <p>Выбери версию своего устройства и скачай приложение Hiddify по соответствующей ссылке</p>
                 <div class="uk-child-width-expand" uk-grid>
-                    <ul class="uk-list uk-list-divider" >
+                    <ul class="uk-list uk-list-divider">
                         <li>
                             <a class="uk-link" href="https://apps.apple.com/us/app/hiddify-proxy-vpn/id6596777532" target="_blank">📱 iPhone</a>
                         </li>
@@ -57,11 +63,11 @@
                 </div>
                 <p>Как скачаешь и установишь, возвращайся обратно и нажми на кнопку "Готово!"</p>
                 <div class="uk-text-center">
-                    <button class="uk-button uk-button-primary" onclick={() => UIkit.accordion(accordion).toggle(1)}>Готово!</button>
+                    <button class="uk-button uk-button-primary" onclick={() => onSwitchAccorion(1)}>Готово!</button>
                 </div>
             </div>
         </li>
-        <li>
+        <li bind:this={accourdionList[1]}>
             <a class="uk-accordion-title" href>Шаг 2: выключи проксирование на <b>российские</b> ресурсы</a>
             <div class="uk-accordion-content">
                 <p class="uk-text-italic uk-text-small uk-text-muted">...чтобы не включать и выключать впн каждый раз</p>
@@ -74,11 +80,11 @@
                     <li>Закрой <b>Hiddify</b></li>
                 </ol>
                 <div class="uk-text-center uk-margin-top">
-                    <button class="uk-button uk-button-primary" onclick={() => UIkit.accordion(accordion).toggle(2)}>Готово!</button>
+                    <button class="uk-button uk-button-primary" onclick={() => onSwitchAccorion(2)}>Готово!</button>
                 </div>
             </div>
         </li>
-        <li>
+        <li bind:this={accourdionList[2]}>
             <a class="uk-accordion-title" href>Шаг 3: <b>подключи ВПН</b></a>
             <div class="uk-accordion-content">
                 <p>
