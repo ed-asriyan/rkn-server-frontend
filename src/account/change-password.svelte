@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import * as UIkit from 'uikit';
-    import type { Database } from './database';
+    import type { Database } from '../database';
 
     interface Props {
         database: Database;

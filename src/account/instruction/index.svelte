@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
-    import type { VpnConfig } from '../database';
+    import type { VpnConfig } from '../../database';
     import Docker from './docker.svelte';
 
     interface Props {
@@ -66,7 +66,6 @@
                     <ul class="uk-list uk-list-divider uk-width-1-4@m uk-width-1-2">
                         <li>
                             <Docker bind:config={dockerConfig} />
-                            {dockerConfig}
                             <a class="uk-link uk-text-small" onclick={() => dockerConfig = config}>🐳 Socks5 Docker</a>
                         </li>
                         <li>

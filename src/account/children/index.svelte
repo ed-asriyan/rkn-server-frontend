@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
-    import { Database, AdoptError, type User } from '../database';
+    import { Database, AdoptError, type User } from '../../database';
     import ChildModal from './child-modal.svelte';
 
     interface Props {
