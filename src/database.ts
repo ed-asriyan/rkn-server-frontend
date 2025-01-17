@@ -19,11 +19,15 @@ export class VpnConfig {
     uuid: string;
     hiddifyOpenUrl: string;
     hiddifySubscriptionUrl: string;
+    xrayClientConfigUrl: string;
+    socks5DockerfileUrl: string;
 
     constructor(data: any) {
         this.uuid = data['uuid'];
         this.hiddifySubscriptionUrl = `https://${location.host}/${this.uuid}/hiddify`;
         this.hiddifyOpenUrl = `hiddify://import/${this.hiddifySubscriptionUrl}`;
+        this.xrayClientConfigUrl = `https://${location.host}/${this.uuid}/client-xray-config.json`;
+        this.socks5DockerfileUrl = `https://${location.host}/${this.uuid}/socks5.Dockerfile`;
     }
 }
 

@@ -1,6 +1,7 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
-    import type { VpnConfig } from './database';
+    import type { VpnConfig } from '../database';
+    import Docker from './docker.svelte';
 
     interface Props {
         config: VpnConfig
@@ -21,16 +22,18 @@
             accourdionList[index - 1]?.scrollIntoView({ behavior: 'smooth' });
         }
     };
+
+    let dockerConfig = $state(null);
 </script>
 
 <div class="uk-padding uk-card uk-card-default uk-card-body">
     <ul uk-accordion bind:this={accordion}>
         <li bind:this={accourdionList[0]} class="uk-open">
-            <a class="uk-accordion-title" href>Шаг 1: Скачай <b>Hiddify</b></a>
+            <a class="uk-accordion-title" href>Шаг 1: скачай <b>Hiddify</b></a>
             <div class="uk-accordion-content">
-                <p>Выбери версию своего устройства и скачай приложение Hiddify по соответствующей ссылке</p>
-                <div class="uk-child-width-expand" uk-grid>
-                    <ul class="uk-list uk-list-divider">
+                <p>Выбери устройство</p>
+                <div class="" uk-grid>
+                    <ul class="uk-list uk-list-divider uk-width-1-4@m uk-width-1-2">
                         <li>
                             <a class="uk-link" href="https://apps.apple.com/us/app/hiddify-proxy-vpn/id6596777532" target="_blank">📱 iPhone</a>
                         </li>
@@ -41,7 +44,7 @@
                             <a class="uk-link" href="https://play.google.com/store/apps/details?id=app.hiddify.com" target="_blank">📱 Android</a>
                         </li>
                     </ul>
-                    <ul class="uk-list uk-list-divider">
+                    <ul class="uk-list uk-list-divider uk-width-1-4@m uk-width-1-2">
                         <li>
                             <a class="uk-link" href="https://apps.apple.com/us/app/hiddify-proxy-vpn/id6596777532" target="_blank">💻 macOS</a>
                         </li>
@@ -52,12 +55,22 @@
                             <a class="uk-link" href="https://github.com/hiddify/hiddify-app/releases/latest" target="_blank">🖥️ Linux</a>
                         </li>
                     </ul>
-                    <ul class="uk-list uk-list-divider">
+                    <ul class="uk-list uk-list-divider uk-width-1-4@m uk-width-1-2">
                         <li>
                             <a class="uk-link" href="https://apps.apple.com/us/app/hiddify-proxy-vpn/id6596777532" target="_blank">📺 Apple TV</a>
                         </li>
                         <li>
                             <a class="uk-link" href="https://play.google.com/store/apps/details?id=app.hiddify.com" target="_blank">📺 Android TV</a>
+                        </li>
+                    </ul>
+                    <ul class="uk-list uk-list-divider uk-width-1-4@m uk-width-1-2">
+                        <li>
+                            <Docker bind:config={dockerConfig} />
+                            {dockerConfig}
+                            <a class="uk-link uk-text-small" onclick={() => dockerConfig = config}>🐳 Socks5 Docker</a>
+                        </li>
+                        <li>
+                            <a class="uk-link uk-text-small" href={config.xrayClientConfigUrl} target="_blank">⚙️ Xray client config</a>
                         </li>
                     </ul>
                 </div>

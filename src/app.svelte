@@ -1,7 +1,7 @@
 <script lang="ts">
   import 'uikit/dist/js/uikit';
   import Faq from './faq.svelte';
-  import Instruction from './instruction.svelte';
+  import Instruction from './instruction/index.svelte';
   import AdoptedKeys from './children/index.svelte';
   import Consent from './consent.svelte';
   import { Database } from './database';
@@ -56,11 +56,11 @@
   <div uk-spinner></div>
 {:then database}
   <Consent />
-  <div class="uk-section uk-section-muted uk-padding-remote-top">
-    <div class="uk-container uk-container-xsmall">
+  <div class="uk-section uk-section-muted uk-padding-remove-top">
+    <div class="uk-container uk-container-xsmall uk-margin-top">
       <ChangePassword database={database}/>
       {#await database.fetchConfig()}
-      <br/>
+        <br/>
         <div uk-spinner></div>
       {:then config} 
         <Instruction config={config}/>
