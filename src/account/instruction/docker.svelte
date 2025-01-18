@@ -24,7 +24,7 @@
 <div bind:this={modal} uk-modal>
     {#if config}
         <div class="uk-modal-dialog uk-modal-body">
-            <h2 class="uk-modal-title">Sock5 thru Docker</h2>
+            <h2 class="uk-modal-title">Socks5 on Docker</h2>
             <ol>
                 <li>Скачай и установи <a href="https://docker.com" target="_blank">Docker</a></li>
                 <li>

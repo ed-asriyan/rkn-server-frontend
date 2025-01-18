@@ -11,6 +11,8 @@
   }
 
   let { database }: Props = $props();
+
+  let shareVpnElement: HTMLElement = $state(null);
 </script>
 
 <Consent />
@@ -21,12 +23,12 @@
       <br/>
       <div uk-spinner></div>
     {:then config} 
-      <Instruction config={config}/>
+      <Instruction config={config} shareVpnElement={shareVpnElement}/>
     {/await}
   </div>
 </div>
 
-<div class="uk-section uk-section-secondary">
+<div class="uk-section uk-section-secondary" bind:this={shareVpnElement}>
   <div class="uk-container uk-container-xsmall">
     <AdoptedKeys database={database}/>
   </div>

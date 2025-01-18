@@ -4,10 +4,11 @@
     import Docker from './docker.svelte';
 
     interface Props {
-        config: VpnConfig
+        config: VpnConfig,
+        shareVpnElement: HTMLElement,
     }
 
-    let { config }: Props = $props();
+    let { config, shareVpnElement }: Props = $props();
 
     const onConnectClick = function(): void {
         window.location.href = config.hiddifyOpenUrl;
@@ -24,6 +25,10 @@
     };
 
     let dockerConfig = $state(null);
+
+    const onShareClick = function(): void {
+        shareVpnElement?.scrollIntoView({ behavior: 'smooth' });
+    };
 </script>
 
 <div class="uk-padding uk-card uk-card-default uk-card-body">
@@ -73,7 +78,7 @@
                         </li>
                     </ul>
                 </div>
-                <p>Как скачаешь и установишь, возвращайся обратно и нажми на кнопку "Готово!"</p>
+                <p>Как установишь, не спеши открывать приложение. Возвращайся сюда и нажми на кнопку "Готово!"</p>
                 <div class="uk-text-center">
                     <button class="uk-button uk-button-primary" onclick={() => onSwitchAccorion(1)}>Готово!</button>
                 </div>
@@ -85,12 +90,11 @@
                 <p class="uk-text-italic uk-text-small uk-text-muted">...чтобы не включать и выключать впн каждый раз</p>
                 <ol>
                     <li>Открой <b>Hiddify</b></li>
-                    <li>Нажми на <b>Settings</b> (кнопка с шестерёнками) внизу экрана в Hiddify</li>
-                    <li>Пролистай до секции <b>Route Options</b> (3-я секция)</li>
-                    <li>Нажми на <b>Region</b> (первый в секции)</li>
-                    <li>Выбери <b>Russia (ru)</b></li>
-                    <li>Закрой <b>Hiddify</b></li>
+                    <li>Появится запрос на разрешение создания ВПН конфигрураций. <b>Разреши</b>.</li>
+                    <li>Должен появиться экран первичной настройки, найди на нем поле <b>Region</b> и выбери <b>Russia (ru)</b></li>
+                    <li>Нажми <b>Start</b></li>
                 </ol>
+                <p>Как сделаешь, возвращайся сюда и нажми на кнопку "Готово!"</p>
                 <div class="uk-text-center uk-margin-top">
                     <button class="uk-button uk-button-primary" onclick={() => onSwitchAccorion(2)}>Готово!</button>
                 </div>
@@ -100,7 +104,7 @@
             <a class="uk-accordion-title" href>Шаг 3: <b>подключи ВПН</b></a>
             <div class="uk-accordion-content">
                 <p>
-                    Нажми на кнопку <b>Подключить ВПН</b> внизу.<br/>
+                    Нажми на кнопку <b class="uk-text-danger cursor" onclick={onConnectClick}>Подключить ВПН</b><br/>
                     Откроется приложение, должно выскочить зеленое уведомление, что ВПН добавлен.
                 </p>
                 <div class="uk-text-center">
@@ -114,6 +118,9 @@
                 </p>
                 <p class="uk-text-center">
                     <code>{config.hiddifySubscriptionUrl}</code>
+                </p>
+                <p class="uk-text-center">
+                    <button class="uk-button uk-button-primary" onclick={onShareClick}>👇 Сделать ВПН для друга! 👇</button>
                 </p>
             </div>
         </li>
