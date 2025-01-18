@@ -78,7 +78,12 @@
       </div>
       <div class="uk-margin">
         <button class="uk-button uk-button-primary" type="submit" disabled={isLoading}>
-          {#if isLoading}Думаю думалку...{:else}Войти{/if}
+          {#if isLoading}
+            <div uk-spinner="ratio: 0.7" class="uk-margin-right"></div> 
+            Думаю думалку...
+          {:else}
+            Войти
+          {/if}
         </button>
       </div>
       {#if isPasswordInvalid}
