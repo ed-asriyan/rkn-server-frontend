@@ -2,6 +2,7 @@
     import * as UIkit from 'uikit';
     import type { VpnConfig } from '../../database';
     import Docker from './docker.svelte';
+    import Openwrt from './openwrt.svelte';
 
     interface Props {
         config: VpnConfig,
@@ -25,6 +26,7 @@
     };
 
     let dockerConfig = $state(null);
+    let openwrtConfig = $state(null);
 
     const onShareClick = function(): void {
         shareVpnElement?.scrollIntoView({ behavior: 'smooth' });
@@ -70,11 +72,21 @@
                     </ul>
                     <ul class="uk-list uk-list-divider uk-width-1-4@m uk-width-1-2">
                         <li>
+                            <Openwrt bind:config={openwrtConfig} />
+                            <a class="uk-link uk-text-small" onclick={() => openwrtConfig = config}>🛜 OpenWRT</a>
+                        </li>
+                        <li>
                             <Docker bind:config={dockerConfig} />
                             <a class="uk-link uk-text-small" onclick={() => dockerConfig = config}>🐳 Socks5 Docker</a>
                         </li>
                         <li>
-                            <a class="uk-link uk-text-small" href={config.xrayClientConfigUrl} target="_blank">⚙️ Xray client config</a>
+                            <span class="uk-link uk-text-small" >⚙️ Xray client config</span>
+                            <div uk-dropdown>
+                                <ul>
+                                    <li><a class="uk-link uk-text-small" href={config.xrayClientConfigSocks5Url} target="_blank">Socks5</a></li>
+                                    <li><a class="uk-link uk-text-small" href={config.xrayClientConfigTproxyUrl} target="_blank">TProxy</a></li>
+                                </ul>
+                            </div>
                         </li>
                     </ul>
                 </div>
