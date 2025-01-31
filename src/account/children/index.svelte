@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
-    import { Database, AdoptError, type User } from '../../database';
+    import { Database, AdoptError, type Member } from '../../database';
     import ChildModal from './child-modal.svelte';
 
     interface Props {
@@ -42,7 +42,7 @@
         ++key;
     };
 
-    let userModal: User = $state(null);
+    let userModal: Member = $state(null);
 
     let lastUserModalName: string | null = null;
     $effect(() => {
@@ -65,7 +65,7 @@
 
 <hr/>
 
-<ChildModal bind:user={userModal} database={database} />
+<ChildModal bind:member={userModal} database={database} />
 
 {#key key}
     {#await database.fetchChildren()}
@@ -95,7 +95,7 @@
                                 <td>
                                     <button class="uk-button uk-button-default uk-button-small uk-text-truncate" onclick={() => userModal = child}>Открыть</button>
                                     &nbsp;
-                                    <span class="uk-text-truncate uk-butdton uk-link uk-text-muted" onclick={() => userModal = child}>{child.name || child.childUuid}</span>
+                                    <span class="uk-text-truncate uk-butdton uk-link uk-text-muted" onclick={() => userModal = child}>{child.name || child.uuid}</span>
                                 </td>
                                 <td>{child.createdAt.toLocaleString()}</td>
                             </tr>

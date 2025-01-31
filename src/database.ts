@@ -1,14 +1,14 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Config } from './config';
 
-export class User {
-    childUuid: string;
+export class Member {
+    uuid: string;
     parentUuid: string;
     createdAt: Date;
     name: string;
 
     constructor(data: any) {
-        this.childUuid = data['child_uuid'];
+        this.uuid = data['uuid'];
         this.parentUuid = data['parent_uuid'];
         this.createdAt = new Date(data['created_at']);
         this.name = data['name'];
@@ -65,18 +65,18 @@ export class Database {
         return new Database(supabase, (await supabase.auth.getUser()).data.user.id, password === uuid);
     }
 
-    async fetchChildren(): Promise<{ children: User[], count: number }> {
-        const { data, error, count } = await this.supabase.from('users').select('*', { count: 'exact' });
+    async fetchChildren(): Promise<{ children: Member[], count: number }> {
+        const { data, error, count } = await this.supabase.from('members').select('*', { count: 'exact' });
         if (error) {
             throw error;
         }
         return {
-            children: data.map(rawValue => new User(rawValue)),
+            children: data.map(rawValue => new Member(rawValue)),
             count,
         };
     }
 
-    async adopt(name: string): Promise<User> {
+    async adopt(name: string): Promise<Member> {
         const { data, error } = await this.supabase.functions.invoke('adopt', {
             body: { parentUuid: this.uuid, name }
         });
@@ -84,14 +84,14 @@ export class Database {
             throw error;
         }
         if (data.code === 0) {
-            return new User(data.data);
+            return new Member(data.data);
         } else {
             throw new AdoptError(data.code);
         }
     }
 
     async renameConfig(childUuid: string, name: string): Promise<void> {
-        const { error } = await this.supabase.from('users').update({ name }).eq('child_uuid', childUuid);
+        const { error } = await this.supabase.from('members').update({ name }).eq('uuid', childUuid);
         if (error) {
             throw error;
         }

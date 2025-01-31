@@ -1,20 +1,20 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
-    import type { User, Database } from '../database';
+    import type { Member, Database } from '../database';
 
     interface Props {
-        user: User | null;
+        member: Member | null;
         database: Database;
     }
 
-    let { user = $bindable(), database }: Props = $props();
+    let { member = $bindable(), database }: Props = $props();
 
     let isLoading = $state(false);
 
     let modal = $state(null);
 
     $effect(() => {
-        if (user) {
+        if (member) {
             UIkit.modal(modal).show();
         } else {
             UIkit.modal(modal).hide();
@@ -30,7 +30,7 @@
     };
 
     const generateShareLink = function (): string {
-        return `https://${location.host}#${user?.childUuid}`;
+        return `https://${location.host}#${member?.uuid}`;
     };
 
     const canShare: boolean = Boolean(navigator.share);
@@ -47,14 +47,14 @@
     };
 
     const rename = async function (): Promise<void> {
-        if (!user) return;
+        if (!member) return;
 
         try {
-            const newName = prompt('Введите новое имя:', user.name);
+            const newName = prompt('Введите новое имя:', member.name);
             if (newName) {
-                await database.renameConfig(user.childUuid, newName);
+                await database.renameConfig(member.uuid, newName);
                 UIkit.notification('Имя изменено', { status: 'success' });
-                user = { ...user, name: newName };
+                member = { ...member, name: newName };
             }
         } catch (e) {
             console.error(e);
@@ -64,13 +64,13 @@
 </script>
 
 <div bind:this={modal} uk-modal>
-    {#if user}
+    {#if member}
         <div class="uk-modal-dialog uk-modal-body">
             <h2 class="uk-modal-title">
-                Пользователь: <b>{ user.name }</b>
+                Пользователь: <b>{ member.name }</b>
                 <button class="uk-button uk-button-default" onclick={rename}>✍🏻 Переименовать</button>
             </h2>
-            <p class="uk-text-small uk-text-muted">Дата приглашения: { user.createdAt.toLocaleString() }</p>
+            <p class="uk-text-small uk-text-muted">Дата приглашения: { member.createdAt.toLocaleString() }</p>
             {#if isLoading}
                 <div uk-spinner></div>
             {:else}
@@ -86,7 +86,7 @@
                         <li>Если ВПНом не будут пользоваться более одного <b>месяца</b>, он может быть <b>отключён</b></li>
                     </ul>
                 </div>
-                <button class="uk-button uk-button-default" onclick={() => user = null}>Закрыть</button>
+                <button class="uk-button uk-button-default" onclick={() => member = null}>Закрыть</button>
             {/if}
         </div>
     {/if}
