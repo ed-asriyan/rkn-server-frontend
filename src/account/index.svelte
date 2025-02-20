@@ -7,18 +7,24 @@
   import { Database } from '../database';
 
   interface Props {
-      database: Database;
+    database: Database;
+    hideConsent: boolean;
+    hideChangePassword: boolean;
   }
 
-  let { database }: Props = $props();
+  let { database, hideConsent, hideChangePassword }: Props = $props();
 
   let shareVpnElement: HTMLElement = $state(null);
 </script>
 
-<Consent />
+{#if !hideConsent}
+  <Consent />
+{/if}
 <div class="uk-section uk-section-muted uk-padding-remove-top">
   <div class="uk-container uk-container-xsmall uk-margin-top">
-    <ChangePassword database={database}/>
+    {#if !hideChangePassword}
+      <ChangePassword database={database}/>
+    {/if}
     {#await database.fetchConfig()}
       <br/>
       <div uk-spinner></div>
