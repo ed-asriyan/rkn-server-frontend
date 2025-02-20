@@ -30,7 +30,7 @@
     };
 
     const generateShareLink = function (): string {
-        return `https://${location.host}#${member?.uuid}`;
+        return `https://${location.host}#?uuid=${member?.uuid}`;
     };
 
     const canShare: boolean = Boolean(navigator.share);
