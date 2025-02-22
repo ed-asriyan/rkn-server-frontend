@@ -15,6 +15,7 @@
     password: string;
     hideConsent: boolean;
     hideChangePassword: boolean;
+    redirect: string
   }
 
   const parseHash = function(): Params {
@@ -25,6 +26,7 @@
         password: params.get('password') || '',
         hideConsent: params.get('hideConsent') === 'true',
         hideChangePassword: params.get('hideChangePassword') === 'true',
+        redirect: params.get('redirect') || ''
       };
       // invalidate location so that users cannot share personal links
       window.history.pushState({}, '', '/#do-not-share-your-personal-link');
@@ -33,7 +35,10 @@
   };
 
   const params = parseHash();
-
+  if (params.redirect) {
+    window.location.href = params.redirect;
+  };
+  
   let database: Database = $state(null);
 
   onMount(async () => {

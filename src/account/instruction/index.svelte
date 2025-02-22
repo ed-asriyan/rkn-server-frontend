@@ -13,7 +13,7 @@
 
     const onConnectClick = function(): void {
         if (window.Telegram?.WebApp) {
-            window.Telegram.WebApp.openLink(config.hiddifyOpenUrl);
+            window.Telegram.WebApp.openLink(`${location.origin}#?redirect=${encodeURIComponent(config.hiddifyOpenUrl)}`);
         } else {
             window.location.href = config.hiddifyOpenUrl;
         }
