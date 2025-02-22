@@ -12,7 +12,11 @@
     let { config, shareVpnElement }: Props = $props();
 
     const onConnectClick = function(): void {
-        window.location.href = config.hiddifyOpenUrl;
+        if (window.Telegram?.WebApp) {
+            window.Telegram.WebApp.openLink(config.hiddifyOpenUrl);
+        } else {
+            window.location.href = config.hiddifyOpenUrl;
+        }
     };
 
     let accordion: HTMLElement;
