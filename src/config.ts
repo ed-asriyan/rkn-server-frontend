@@ -1,6 +1,7 @@
 export interface Config {
     supabaseUrl: string;
     supabaseKey: string;
+    origin: string;
 }
 
 export async function fetchConfig(): Promise<Config> {
