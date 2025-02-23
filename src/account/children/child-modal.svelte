@@ -77,7 +77,9 @@
                 <p>Поделись ссылкой с пользователем. Когда он перейдёт по ней, он получит персональный ВПН и инструкцию по установке</p>
                 <div class="uk-text-center uk-margin-bottom">
                     <code onclick={() => copyToClipboard(generateShareLink())} class="uk-margin-bottom uk-link" uk-tooltip="Скопировать">{ generateShareLink() }</code>
-                    <button class="uk-button uk-button-primary uk-button-smasll uk-text-truncate uk-margin-top" onclick={() => linkClick()}>👉 &nbsp Поделиться ссылкой &nbsp 👈</button>
+                    <div>
+                        <button class="uk-button uk-button-primary uk-button-smasll uk-text-truncate uk-margin-top" onclick={() => linkClick()}>👉 &nbsp Поделиться ссылкой &nbsp 👈</button>
+                    </div>
                 </div>
                 <div>
                     <p>Правила:</p>

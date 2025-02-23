@@ -1,47 +1,15 @@
 <script lang="ts">
-  import Faq from './faq.svelte';
-  import Instruction from './instruction/index.svelte';
-  import AdoptedKeys from './children/index.svelte';
+  import { RouterView } from '@dvcol/svelte-simple-router/components';
   import Consent from './consent.svelte';
-  import ChangePassword from './change-password.svelte';
-  import { Database } from '../database';
-
-  interface Props {
-    database: Database;
-    hideConsent: boolean;
-    hideChangePassword: boolean;
-  }
-
-  let { database, hideConsent, hideChangePassword }: Props = $props();
-
-  let shareVpnElement: HTMLElement = $state(null);
+  import { configurationStore } from '../stores/configuration';
+  import { options } from './router';
 </script>
 
-{#if !hideConsent}
+{#if !$configurationStore.hideConsent}
   <Consent />
 {/if}
-<div class="uk-section uk-section-muted uk-padding-remove-top">
+<div class="container">
   <div class="uk-container uk-container-xsmall uk-margin-top">
-    {#if !hideChangePassword}
-      <ChangePassword database={database}/>
-    {/if}
-    {#await database.fetchConfig()}
-      <br/>
-      <div uk-spinner></div>
-    {:then config} 
-      <Instruction config={config} shareVpnElement={shareVpnElement}/>
-    {/await}
-  </div>
-</div>
-
-<div class="uk-section uk-section-secondary" bind:this={shareVpnElement}>
-  <div class="uk-container uk-container-xsmall">
-    <AdoptedKeys database={database}/>
-  </div>
-</div>
-
-<div class="uk-section uk-section-muted">
-  <div class="uk-container">
-    <Faq/>
+    <RouterView {options} />
   </div>
 </div>

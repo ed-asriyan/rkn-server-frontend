@@ -1,16 +1,12 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import * as UIkit from 'uikit';
-    import type { Database } from '../database';
+    import { database } from '../stores/database';
 
-    interface Props {
-        database: Database;
-    }
-
-    let { database }: Props = $props();
+    let { show = $bindable() } = $props();
 
     onMount(() => {
-        if (database.isPasswordSetupNeeded) {
+        if (database?.isPasswordSetupNeeded) {
             UIkit.modal(modal).show();
         }
     });
@@ -20,6 +16,14 @@
     let modal = $state(null);
 
     let isLoading = $state(false);
+
+    $effect(() => {
+        if (show) {
+            UIkit.modal(modal).show();
+        } else {
+            UIkit.modal(modal).hide();
+        }
+    });
 
     const changePassword = async function (e) {
         e.preventDefault();
@@ -31,8 +35,8 @@
 
         try {
             isLoading = true;
-            await database.changePassword(newPassword);
-            UIkit.modal(modal).hide();
+            await $database?.changePassword(newPassword);
+            show = false;
         } catch (e) {
             console.error(e);
             alert(e.toString());
@@ -44,13 +48,10 @@
     };
 </script>
 
-<div class="uk-text-center uk-margin-bottom">
-    <button class="uk-button uk-button-default" onclick={() => UIkit.modal(modal).show()}>🔐 Сменить пароль</button>
-</div>
 <div bind:this={modal} uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
         <h2 class="uk-modal-title">Сменить пароль</h2>
-        {#if database.isPasswordSetupNeeded}
+        {#if $database?.isPasswordSetupNeeded}
             <p>Скорее всего ты открыл эту ссылку в первый раз. Ты можешь создать пароль, чтобы только ты мог иметь доступ к этому ВПН.</p>
         {/if}
 
@@ -69,7 +70,7 @@
             {:else}
                 <div class="uk-margin">
                     <button type="submit" class="uk-button uk-button-primary">Сохранить</button>
-                    <button class="uk-button uk-button-default" onclick={() => UIkit.modal(modal).hide()}>закрыть</button>
+                    <button class="uk-button uk-button-default" onclick={() => { show = false }}>закрыть</button>
                 </div>
             {/if}
         </form>

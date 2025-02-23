@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
-import type { Config } from './config';
+import type { Config } from '../config';
+import { writable } from 'svelte/store';
 
 export class Member {
     uuid: string;
@@ -76,6 +77,20 @@ export class Database {
         };
     }
 
+    async descendantsCount(): Promise<{ count: number }> {
+        const { data, error } = await this.supabase.from('members_descendants').select('count').eq('uuid', this.uuid);
+        if (error) {
+            throw error;
+        }
+        if (data.length === 0) {
+            return { count: 0 };
+        } else {
+            return {
+                count: data[0].count,
+            };
+        }
+    }
+
     async adopt(name: string): Promise<Member> {
         const { data, error } = await this.supabase.functions.invoke('adopt', {
             body: { parentUuid: this.uuid, name }
@@ -113,3 +128,5 @@ export class Database {
         return new VpnConfig(data);
     }
 }
+
+export const database = writable<Database | null>(null);

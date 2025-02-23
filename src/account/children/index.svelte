@@ -1,13 +1,13 @@
 <script lang="ts">
+    import { useRouter } from "@dvcol/svelte-simple-router/router";
     import * as UIkit from 'uikit';
-    import { Database, AdoptError, type Member } from '../../database';
+    import { Database, AdoptError, type Member, database as databaseStore } from '../../stores/database';
     import ChildModal from './child-modal.svelte';
+    import LogoEmoji from "../../components/logo-emoji.svelte";
 
-    interface Props {
-        database: Database;
-    }
+    let database: Database = $databaseStore;
 
-    let { database }: Props = $props();
+    const router = useRouter();
 
     const responseMap: {[x: number]: string } = {
         0: 'Новый ВПН создан',
@@ -17,7 +17,7 @@
     };
 
     let loading: boolean = $state(false);
-    const adoptClick = async function(database: Database): Promise<void> {
+    const adoptClick = async function(): Promise<void> {
         try {
             loading = true;
             const name = prompt('Введите имя нового пользователя ВПН (имя будет видно только вам):');
@@ -53,31 +53,57 @@
     });
 </script>
 
-<h2>👥 Сгенерировать ВПН</h2>
-<p>Ты можешь создать новый ВПН и поделиться им с другим человеком. Для этого нажми на кнопку:</p>
-<div class="uk-text-center">
-    {#if loading}
-        <span uk-spinner></span>
-    {:else}
-        <button class="uk-widt1 uk-button uk-button-primary" onclick={() => adoptClick(database)}>🔄 Сгенерировать ВПН 🔄</button>
-    {/if}
-</div>
-
-<hr/>
-
 <ChildModal bind:member={userModal} database={database} />
 
+<h1 class="uk-heading-small uk-text-center"><LogoEmoji/>&nbsp;&nbspAnywhere VPN</h1>
+<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => router.push({ path: '/' }) }>🏠 На главную</button>
+
+<p>
+    Вы можете создавать VPN для семьи, друзей и других людей.
+</p>
+
+<p>
+    Те, с кем Вы поделились VPN, тоже могут передавать его дальше.
+</p>
+
+
 {#key key}
-    {#await database.fetchChildren()}
+    {#await Promise.all([database.fetchChildren(), database.descendantsCount()])}
         <div uk-spinner></div>
-    {:then { children, count }} 
-        <p class="uk-text-center uk-text-bold">
-            {#if children.length > 0}
-                Всего ты сгенерировал(а) {count} ВПН
+    {:then [{ children, count: childrenCount }, { count: descendantsCount }]} 
+        <div class="uk-card uk-card-default uk-card-body uk-card-small uk-text-left">
+            {#if childrenCount === 0}
+                <p class="uk-text-bold uk-text-emphasis">Разблокированных людей: {childrenCount} 🔒🌍</p>
+                <p>
+                    Вы ещё не поделились VPN, но всё впереди!
+                </p>  
+                <p class="uk-text-bold uk-text-emphasis">
+                     Помоги друзьям и семье — создай им ВПН и преврати 0 в 1, 2, 10... и даже 100+! 🚀
+                </p>
             {:else}
-                Ты ещё не сгенерировал(а) ни одного ВПН
+                {#if descendantsCount === childrenCount}
+                    <p class="uk-text-bold uk-text-emphasis">Отличное начало! 🌱</p>
+                    <p>
+                        Вы уже помогли <b>{descendantsCount} людям</b> получить доступ к интернету!
+                    </p>  
+                    <p>
+                        Как только они поделятся VPN дальше, этот счётчик начнёт расти. <span class="uk-text-bold uk-text-emphasis">Давай посмотрим, сколько людей ты сможешь разблокировать! 🚀</span>
+                    </p>
+                {:else}
+                    <p class="uk-text-bold uk-text-emphasis">Вы разблокировали интернет для {descendantsCount} человек! 🔥🌍</p>
+                    <p>
+                        Вы помоги <b>{childrenCount} людям</b> получить доступ к сети! Они передали VPN дальше, и теперь <b>{descendantsCount} человек</b> свободно пользуются интернетом <b>благодаря Вам</b>.
+                    </p>  
+                    <p class="uk-text-bold uk-text-emphasis">
+                        Продолжай делиться и увеличивай этот счётчик! 🚀
+                    </p>
+                {/if}
             {/if}
-            </p>
+        </div>
+        
+        <button class="uk-button uk-button-large uk-button-primary uk-width-1-1 uk-margin-top" onclick={() => adoptClick()}>
+            🤙 Создать ВПН
+        </button>
         {#if children.length > 0}
             <div style="overflow-x: auto;">
                 <table class="uk-table uk-table-small uk-table-divider">
