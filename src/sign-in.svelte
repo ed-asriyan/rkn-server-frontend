@@ -14,7 +14,8 @@
 
   const parseHash = function(): Configuration {
     if (!parseHash.value) {
-      const params = new URLSearchParams(window.location.hash.substring(1));
+      const url = new URL(`${window.location.origin}/${window.location.hash.substring(1)}`);
+      const params = new URLSearchParams(url.search);
       parseHash.value = {
         uuid: params.get('uuid') || window.location.hash.substring(1) || $passwordStore,
         password: params.get('password') || '',

@@ -53,8 +53,14 @@
     <div>
       <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => showPasswordModal = true}>
         <h5 class="uk-card-title">🔐&nbsp;&nbsp;Сменить пароль</h5>
-        <p>Чтобы никто кроме Вас не воспользовался этой ссылкой</p>
+        <p>Чтобы никто не украл Ваш ВПН</p>
       </div>
     </div>
   {/if}
+  <div>
+    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => router.push({ path: '/add-to-home-screen' })}>
+      <h5 class="uk-card-title">💾&nbsp;&nbsp;Добавить на рабочий стол</h5>
+      <p>Чтобы не потерять ВПН</p>
+    </div>
+  </div>
 </div>

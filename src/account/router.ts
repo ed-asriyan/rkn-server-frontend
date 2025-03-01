@@ -3,12 +3,14 @@ import Home from './home.svelte';
 import Children from './children/index.svelte';
 import Faq from './faq.svelte';
 import Instruction from './instruction/index.svelte';
+import AddToHomeScreen from './add-to-home-screen.svelte';
 
 const RouteName = {
     Home: 'Home',
     Children: 'Children',
     Faq: 'Faq',
     Instruction: 'Instruction',
+    AddToHomeScreen: 'AddToHomeScreen',
 } as const;
 
 type RouteNames = (typeof RouteName)[keyof typeof RouteName];
@@ -44,6 +46,14 @@ const routes: Readonly<Route<RouteNames>[]> = [
         component: Instruction,
         props: {
             title: RouteName.Instruction,
+        },
+    },
+    {
+        name: RouteName.AddToHomeScreen,
+        path: '/add-to-home-screen',
+        component: AddToHomeScreen,
+        props: {
+            title: RouteName.AddToHomeScreen,
         },
     },
 ];
