@@ -36,7 +36,7 @@
         <li bind:this={accourdionList[0]} class="uk-open">
             <a class="uk-accordion-title" href>Шаг 1: скачай <b>Hiddify</b></a>
             <div class="uk-accordion-content">
-                <p>Выбери устройство</p>
+                <p>Выбери устройство и установи приложение. Как установишь, не спеши открывать приложение. Возвращайся сюда и нажми на кнопку "Готово!"</p>
                 <div class="" uk-grid>
                     <ul class="uk-list uk-list-divider uk-width-1-4@m uk-width-1-2">
                         <li>
@@ -88,7 +88,6 @@
                         </li>
                     </ul>
                 </div>
-                <p>Как установишь, не спеши открывать приложение. Возвращайся сюда и нажми на кнопку "Готово!"</p>
                 <div class="uk-text-center">
                     <button class="uk-button uk-button-primary" onclick={() => onSwitchAccorion(1)}>Готово!</button>
                 </div>
