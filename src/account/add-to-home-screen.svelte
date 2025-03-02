@@ -1,20 +1,8 @@
 <script lang="ts">
     import { useRouter } from '@dvcol/svelte-simple-router/router';
     import LogoEmoji from '../components/logo-emoji.svelte';
-    import { configurationStore } from '../stores/configuration';
-    import { onMount } from 'svelte';
 
     const router = useRouter();
-
-    onMount(() => {
-        window.location.replace(`#/add-to-home-screen?uuid=${$configurationStore.uuid}`);
-    });
-
-    const goHomeScreen = function() {
-        window.location.replace(`#/add-to-home-screen`);
-        router.push({ path: '/' });
-    };
-
 </script>
 
 <svelte:head>
@@ -22,7 +10,7 @@
 </svelte:head>
 
 <h1 class="uk-heading-small uk-text-center"><LogoEmoji/>&nbsp;&nbspAnywhere VPN</h1>
-<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={goHomeScreen}>🏠 На главную</button>
+<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => router.push({ path: '/' })}>🏠 На главную</button>
 
 <h2>Добавить на рабочий стол</h2>
 <div class="uk-child-width-1-2@m" uk-grid>

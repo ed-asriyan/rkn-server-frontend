@@ -12,45 +12,24 @@
 
   let { config }: Props = $props();
 
-  const parseHash = function(): Configuration {
-    if (!parseHash.value) {
-      const url = new URL(`${window.location.origin}/${window.location.hash.substring(1)}`);
-      const params = new URLSearchParams(url.search);
-      parseHash.value = {
-        uuid: params.get('uuid') || window.location.hash.substring(1) || $passwordStore,
-        password: params.get('password') || '',
-        hideConsent: params.get('hideConsent') === 'true',
-        hideChangePassword: params.get('hideChangePassword') === 'true',
-      };
-      // invalidate location so that users cannot share personal links
-      window.history.pushState({}, '', '/#/');
-    }
-    return parseHash.value;
-  };
-
-  const hash = parseHash();
-  $configurationStore = {
-    uuid: hash.uuid,
-    password: hash.password,
-    hideConsent: hash.hideConsent,
-    hideChangePassword: hash.hideChangePassword,
-  };
-  if (hash.password) {
-    $passwordStore = hash.password;
+  if ($configurationStore.password) {
+    $passwordStore = $configurationStore.password;
   }
 
   onMount(async () => {
-    if ($configurationStore.password) {
+    window.history.pushState({}, '', '/#/');
+
+    if ($passwordStore) {
       try {
-        $database = await auth($configurationStore.password);
+        $database = await auth($passwordStore);
       } catch (e) {
       }
     }
     if ($database) return;
 
-    if ($passwordStore) {
+    if ($configurationStore.password) {
       try {
-        $database = await auth($passwordStore);
+        $database = await auth($configurationStore.password);
       } catch (e) {
       }
     }

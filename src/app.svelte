@@ -2,6 +2,7 @@
   import 'uikit/dist/js/uikit';
   import { fetchConfig } from './config';
   import SignIn from './sign-in.svelte';
+  import { configurationStore } from './stores/configuration';
 
   const fetchConfigWrap = async function () {
     const config = await fetchConfig();
@@ -9,12 +10,11 @@
       const newUrl = new URL(config.origin);
       newUrl.pathname = window.location.pathname;
       newUrl.search = window.location.search;
-      newUrl.hash = window.location.hash;
+      newUrl.hash = '?' + Object.entries($configurationStore).map(([key, value]) => `${key}=${value}`).join('&');
       window.location.replace(newUrl.toString());
     }
     return config;
-  }
-
+  };
 </script>
 
 <svelte:head>
