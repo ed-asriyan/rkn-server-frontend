@@ -1,5 +1,6 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
+    import QRCode from '@castlenine/svelte-qrcode';
     import type { Member, Database } from '../database';
 
     interface Props {
@@ -29,20 +30,17 @@
         });
     };
 
-    const generateShareLink = function (): string {
-        return `https://${location.host}#?uuid=${member?.uuid}`;
-    };
+    let shareLink = $derived(`https://${location.host}#?uuid=${member?.uuid}`);
 
     const canShare: boolean = Boolean(navigator.share);
     const linkClick = function (): void {
-        const url = generateShareLink();
         if (canShare) {
             navigator.share({
                 title: 'ВПН',
-                url,
+                url: shareLink,
             });
         } else {
-            copyToClipboard(url);
+            copyToClipboard(shareLink);
         }
     };
 
@@ -76,7 +74,10 @@
             {:else}
                 <p>Поделись ссылкой с пользователем. Когда он перейдёт по ней, он получит персональный ВПН и инструкцию по установке</p>
                 <div class="uk-text-center uk-margin-bottom">
-                    <code onclick={() => copyToClipboard(generateShareLink())} class="uk-margin-bottom uk-link" uk-tooltip="Скопировать">{ generateShareLink() }</code>
+                    <div class="uk-margin-bottom cursor" uk-tooltip="Скопировать ссылку" onclick={() => linkClick()}>
+                        <QRCode data={shareLink} />
+                    </div>
+                    <code onclick={() => copyToClipboard(shareLink)} class="uk-margin-bottom uk-link" uk-tooltip="Скопировать">{ shareLink }</code>
                     <div>
                         <button class="uk-button uk-button-primary uk-button-smasll uk-text-truncate uk-margin-top" onclick={() => linkClick()}>👉 &nbsp Поделиться ссылкой &nbsp 👈</button>
                     </div>
