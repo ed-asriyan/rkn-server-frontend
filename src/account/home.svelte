@@ -64,3 +64,7 @@
     </div>
   </div>
 </div>
+
+<div class="uk-text-center uk-margin-large-top uk-margin-bottom uk-text-small">
+  User ID:<br/><b>{$configurationStore.uuid}</b>
+</div>
