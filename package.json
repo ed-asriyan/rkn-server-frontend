@@ -20,7 +20,7 @@
 		"@wjfe/n-savant": "^0.3.0",
 		"sass": "^1.79.4",
 		"svelte": "^5.0.0",
-		"svelte-check": "^4.0.0",
+		"svelte-check": "^4.1.7",
 		"tslib": "^2.6.2",
 		"typescript": "^5.5.0",
 		"uikit": "^3.23.1",
