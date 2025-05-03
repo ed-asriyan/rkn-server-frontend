@@ -14,10 +14,10 @@
 	},
 	"devDependencies": {
 		"@castlenine/svelte-qrcode": "^2.3.0",
-		"@dvcol/svelte-simple-router": "^1.11.0",
 		"@supabase/supabase-js": "^2.45.4",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"@tsconfig/svelte": "^5.0.2",
+		"@wjfe/n-savant": "^0.3.0",
 		"sass": "^1.79.4",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",

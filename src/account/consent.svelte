@@ -1,11 +1,17 @@
 <script lang="ts">
   import * as UIkit from 'uikit';
   import { onMount } from 'svelte';
+  import { createLocalStorageStore } from '../stores/local-storage';
+
+  const accepted = createLocalStorageStore('consent', 'false');
 
   let modal = $state(null);
 
   onMount(() => {
-    UIkit.modal(modal).show();
+    if ($accepted !== 'true') {
+      UIkit.modal(modal).show();
+      $accepted = 'true';
+    }
   });
   
   const close = function(): void {

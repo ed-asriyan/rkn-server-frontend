@@ -1,13 +1,13 @@
 <script lang="ts">
-    import { useRouter } from "@dvcol/svelte-simple-router/router";
     import * as UIkit from 'uikit';
+    import { location } from '@wjfe/n-savant';
     import { Database, AdoptError, type Member, database as databaseStore } from '../../stores/database';
     import ChildModal from './child-modal.svelte';
     import LogoEmoji from "../../components/logo-emoji.svelte";
 
-    let database: Database = $databaseStore;
+    const { uuid }: { uuid: string } = $props();
 
-    const router = useRouter();
+    let database: Database = $databaseStore;
 
     const responseMap: {[x: number]: string } = {
         0: 'Новый ВПН создан',
@@ -56,7 +56,7 @@
 <ChildModal bind:member={userModal} database={database} />
 
 <h1 class="uk-heading-small uk-text-center"><LogoEmoji/>&nbsp;&nbspAnywhere VPN</h1>
-<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => router.push({ path: '/' }) }>🏠 На главную</button>
+<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => location.navigate(`#/${uuid}`) }>🏠 На главную</button>
 
 <p>
     Вы можете создавать VPN для семьи, друзей и других людей.

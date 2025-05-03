@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { useRouter } from '@dvcol/svelte-simple-router/router';
+    import { location } from '@wjfe/n-savant';
     import LogoEmoji from '../components/logo-emoji.svelte';
 
-    const router = useRouter();
+    const { uuid }: { uuid: string } = $props();
 </script>
 
 <svelte:head>
@@ -10,7 +10,7 @@
 </svelte:head>
 
 <h1 class="uk-heading-small uk-text-center"><LogoEmoji/>&nbsp;&nbspAnywhere VPN</h1>
-<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => router.push({ path: '/' })}>🏠 На главную</button>
+<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => location.navigate(`#/${uuid}`)}>🏠 На главную</button>
 
 <h2>Добавить на рабочий стол</h2>
 <div class="uk-child-width-1-2@m" uk-grid>

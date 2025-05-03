@@ -1,4 +1,4 @@
-FROM node:18 as dev
+FROM node:22 as dev
 
 FROM dev as base
 
@@ -21,6 +21,10 @@ COPY src src
 
 FROM base as builder
 ARG NODE_ENV
+ARG VITE_SUPABASE_URL
+ARG VITE_SUPABASE_KEY
+ARG VITE_VERSION
+ARG VITE_ORIGIN
 
 RUN npm run build -- --mode $NODE_ENV
 

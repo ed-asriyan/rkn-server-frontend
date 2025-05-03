@@ -2,31 +2,34 @@ name: CD
 
 on:
   push:
-    tags: 
-      - 'v[0-9].[0-9]+.[0-9]+'
+    branches:
+      - "master"
+
+concurrency:
+  group: "pages"
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '22'
-          cache: 'npm'
+      - name: Save .env file
+        env:
+          ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT }}
+        shell: bash
+        run: |
+          echo "$ENV_FILE_CONTENT" > .env
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Add git commit hash to .env file
+        run: echo -e "\nVITE_VERSION=$(git rev-parse --short HEAD)" >> .env
 
-      - name: Build project
-        run: npm run build
+      - name: Build the app
+        run: make prod_build_bundle
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: dist/index.html
-          draft: false
+      - name: Deploy to Cloudflare Pages
+        run: npx wrangler pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }} --branch main
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

@@ -1,17 +1,16 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
-    import type { VpnConfig } from '../../stores/databaseatabase';
+    import { location } from '@wjfe/n-savant';
+    import type { VpnConfig } from '../../stores/database';
     import Docker from './docker.svelte';
     import Openwrt from './openwrt.svelte';
-    import { useRouter } from '@dvcol/svelte-simple-router/router';
-
-    const router = useRouter();
 
     interface Props {
         config: VpnConfig,
+        uuid: string
     }
 
-    let { config }: Props = $props();
+    let { config, uuid }: Props = $props();
 
     const onConnectClick = function(): void {
         window.location.href = config.hiddifyOpenUrl;
@@ -129,7 +128,7 @@
                     <code>{config.hiddifySubscriptionUrl}</code>
                 </p>
                 <p class="uk-text-center">
-                    <button class="uk-button uk-button-primary" onclick={() => router.push({ path: '/children' })}>Сделать ВПН для друга!</button>
+                    <button class="uk-button uk-button-primary" onclick={() => location.navigate(`#/${uuid}/children`)}>Сделать ВПН для друга!</button>
                 </p>
             </div>
         </li>

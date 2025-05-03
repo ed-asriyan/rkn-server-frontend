@@ -16,7 +16,7 @@ build_staging_image:
 	docker build--build-arg NODE_ENV=staging -t ${DOCKER_STAGING_IMAGE_NAME} --target app .
 
 build_prod_bundle_image:
-	docker build --build-arg NODE_ENV=production -t ${DOCKER_PROD_BUNDLE_IMAGE_NAME} --target bundle .
+	docker build $$(./buildargs.sh ${ENV_FILE}) --build-arg NODE_ENV=production -t ${DOCKER_PROD_BUNDLE_IMAGE_NAME} --target bundle .
 
 dev_install: build_dev_image
 	docker run ${DEV_RUN_PARAMS} ${DOCKER_DEV_IMAGE_NAME} sh -c "${DEV_INSTALL_COMMAND}"

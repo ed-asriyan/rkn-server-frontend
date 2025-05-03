@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import type { Config } from '../config';
+import { origin } from '../config';
 import { writable } from 'svelte/store';
 
 export class Member {
@@ -26,11 +26,11 @@ export class VpnConfig {
 
     constructor(data: any) {
         this.uuid = data['uuid'];
-        this.hiddifySubscriptionUrl = `https://${location.host}/${this.uuid}/hiddify`;
+        this.hiddifySubscriptionUrl = `${origin}/${this.uuid}/hiddify`;
         this.hiddifyOpenUrl = `hiddify://import/${this.hiddifySubscriptionUrl}`;
-        this.xrayClientConfigSocks5Url = `https://${location.host}/${this.uuid}/client-xray-config-socks5.json`;
-        this.xrayClientConfigTproxyUrl = `https://${location.host}/${this.uuid}/client-xray-config-tproxy.json`;
-        this.socks5DockerfileUrl = `https://${location.host}/${this.uuid}/socks5.Dockerfile`;
+        this.xrayClientConfigSocks5Url = `${origin}/${this.uuid}/client-xray-config-socks5.json`;
+        this.xrayClientConfigTproxyUrl = `${origin}/${this.uuid}/client-xray-config-tproxy.json`;
+        this.socks5DockerfileUrl = `${origin}/${this.uuid}/socks5.Dockerfile`;
     }
 }
 
@@ -54,9 +54,7 @@ export class Database {
         this.isPasswordSetupNeeded = isPasswordSetupNeeded;
     }
 
-    static async connect(config: Config, uuid: string, password: string): Promise<Database> {
-        const { supabaseUrl, supabaseKey } = config;
-
+    static async connect(supabaseUrl: string, supabaseKey: string, uuid: string, password: string): Promise<Database> {
         const supabase = createClient<Database>(supabaseUrl, supabaseKey);
         await supabase.auth.signOut({ scope: 'local' });
         await supabase.auth.signInWithPassword({
