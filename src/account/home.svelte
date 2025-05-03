@@ -10,6 +10,16 @@
 
   let showPasswordModal = $state(false);
   let showAddToHomeScreenModal = $state(false);
+
+  const isPwa = (() => {
+    const mqStandAlone = '(display-mode: standalone)';
+    // @ts-ignore
+    if (navigator.standalone || window.matchMedia(mqStandAlone).matches) {
+      return true;
+    } else {
+      return false;
+    }
+  })();
 </script>
 
 <h1 class="uk-heading-large uk-text-center"><LogoEmoji/></h1>
@@ -53,10 +63,12 @@
       <p>Чтобы никто не украл Ваш ВПН</p>
     </div>
   </div>
-  <div>
-    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => showAddToHomeScreenModal = true}>
-      <h5 class="uk-card-title">💾&nbsp;&nbsp;Добавить на рабочий стол</h5>
-      <p>Чтобы не потерять ВПН</p>
+  {#if !isPwa}
+    <div>
+      <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => showAddToHomeScreenModal = true}>
+        <h5 class="uk-card-title">💾&nbsp;&nbsp;Добавить на рабочий стол</h5>
+        <p>Чтобы не потерять ВПН</p>
+      </div>
     </div>
-  </div>
+  {/if}
 </div>

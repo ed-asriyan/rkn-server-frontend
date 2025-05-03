@@ -1,5 +1,21 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
+    import { detect } from 'detect-browser';
+    import isMobileCheck from 'is-mobile';
+
+    type Browser = 'safari' | 'chrome' | 'unknown';
+    const isMobile: boolean = isMobileCheck();
+
+    const browser: Browser = (() => {
+        switch (detect()?.name) {
+            case 'safari':
+                return 'safari';
+            case 'chrome':
+                return 'chrome';
+            default:
+                return 'unknown';
+        }
+    })();
 
     let { show = $bindable() } = $props();
 
@@ -17,38 +33,55 @@
 <div bind:this={modal} uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
         <h2>Добавить на рабочий стол</h2>
-        <div class="uk-child-width-1-2@m" uk-grid>
-            <div>
-                <h3>iPhone (Safari)</h3>
-                <ol>
-                    <li>Нажмите на иконку <b>поделиться</b> внизу экрана</li>
-                    <li>Нажмите <b>Добавить на главный экран</b></li>
-                    <li>Нажмите <b>Добавить</b></li>
-                </ol>
-            </div>
-            <div>
-                <h3>Android (Chrome)</h3>
-                <ol>
-                    <li>Нажмите на <b>три точки</b> в правом верхнем углу</li>
-                    <li>Нажмите <b>Добавить на главный экран</b></li>
-                    <li>Нажмите <b>Добавить</b></li>
-                </ol>
-            </div>
-            <div>
-                <h3>Mac (Safari)</h3>
-                <ol>
-                    <li>Нажмите на иконку <b>поделиться</b> в правой верхней части окна</li>
-                    <li>Нажмите <b>Add to Dock</b></li>
-                    <li>Нажмите <b>Добавить</b></li>
-                </ol>
-            </div>
-            <div>
-                <h3>Любой другой браузер</h3>
-                <ol>
-                    <li>Добавьте текущую страницу в закладки</li>
-                </ol>
-            </div>
-        </div>
+        <ul uk-accordion>
+            <li class:uk-open={browser === 'safari' && isMobile}>
+                <a class="uk-accordion-title" href>Safari (iPhone)</a>
+                <div class="uk-accordion-content">
+                    <ol>
+                        <li><p>Нажмите на иконку <b>поделиться</b> внизу экрана</p></li>
+                        <li><p>Нажмите <b>Добавить на главный экран</b></p></li>
+                        <li><p>Нажмите <b>Добавить</b></p></li>
+                    </ol>
+                </div>
+            </li>
+            <li class:uk-open={browser === 'safari' && !isMobile}>
+                <a class="uk-accordion-title" href>Safari (macOS)</a>
+                <div class="uk-accordion-content">
+                    <ol>
+                        <li><p>Нажмите на иконку <b>поделиться</b> справа от адресной строки</p></li>
+                        <li><p>Нажмите <b>Add to doc</b></p></li>
+                        <li><p>Нажмите <b>Add</b></p></li>
+                    </ol>
+                </div>
+            </li>
+            <li class:uk-open={browser === 'chrome' && isMobile}>
+                <a class="uk-accordion-title" href>Chrome (phone)</a>
+                <div class="uk-accordion-content">
+                    <ol>
+                        <li><p>Нажмите на <b>три точки</b> в правом верхнем углу</p></li>
+                        <li><p>Нажмите <b>Добавить на главный экран</b></p></li>
+                        <li><p>Нажмите <b>Установить</b></p></li>
+                    </ol>
+                </div>
+            </li>
+            <li class:uk-open={browser === 'chrome' && !isMobile}>
+                <a class="uk-accordion-title" href>Chrome (desktop)</a>
+                <div class="uk-accordion-content">
+                    <ol>
+                        <li><p>Нажмите на иконку <b>установки</b> справа от адресной строки</p></li>
+                        <li><p>Нажмите <b>Установить</b></p></li>
+                    </ol>
+                </div>
+            </li>
+            <li class:uk-open={browser === 'unknown'}>
+                <a class="uk-accordion-title" href>Другие браузеры</a>
+                <div class="uk-accordion-content">
+                    <ol>
+                        <li>Добавьте текущую страницу в закладки</li>
+                    </ol>
+                </div>
+            </li>
+        </ul>
         <div class="uk-margin">
             <button class="uk-button uk-button-default" onclick={() => { show = false }}>закрыть</button>
         </div>
