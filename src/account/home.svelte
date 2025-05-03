@@ -6,7 +6,6 @@
   import AddToHomeScreenModal from "./add-to-home-screen-modal.svelte";
   import { database } from '../stores/database';
 
-
   const { uuid }: { uuid: string } = $props();
 
   let showPasswordModal = $state(false);

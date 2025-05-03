@@ -8,6 +8,7 @@
   import Instruction from "./instruction/index.svelte";
   import Children from "./children/index.svelte";
   import Faq from "./faq.svelte";
+  import Pwa from "./pwa.svelte";
 
   interface Params {
     uuid: string;
@@ -50,6 +51,7 @@
             Думаю думалку...
           {:then _}
             {#if $database}
+              <Pwa uuid={uuid} />
               <div>
                 <Router>
                   <Route key="home" path="/:uuid">
