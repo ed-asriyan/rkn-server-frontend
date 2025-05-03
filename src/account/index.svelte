@@ -8,7 +8,6 @@
   import Instruction from "./instruction/index.svelte";
   import Children from "./children/index.svelte";
   import Faq from "./faq.svelte";
-  import AddToHomeScreen from "./add-to-home-screen.svelte";
 
   interface Params {
     uuid: string;
@@ -64,9 +63,6 @@
                   </Route>
                   <Route key="faq" path="/:uuid/faq">
                     <Faq uuid={uuid} />
-                  </Route>
-                  <Route key="add-to-home-screen" path="/:uuid/add-to-home-screen">
-                    <AddToHomeScreen uuid={uuid} />
                   </Route>
                 </Router>
 

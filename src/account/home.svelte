@@ -3,12 +3,14 @@
   import Consent from './consent.svelte';
   import LogoEmoji from '../components/logo-emoji.svelte';
   import ChangePassword from './change-password.svelte';
+  import AddToHomeScreenModal from "./add-to-home-screen-modal.svelte";
   import { database } from '../stores/database';
-  import { version } from "../config";
+
 
   const { uuid }: { uuid: string } = $props();
 
   let showPasswordModal = $state(false);
+  let showAddToHomeScreenModal = $state(false);
 </script>
 
 <h1 class="uk-heading-large uk-text-center"><LogoEmoji/></h1>
@@ -17,6 +19,7 @@
 
 <Consent />
 <ChangePassword bind:show={showPasswordModal}/>
+<AddToHomeScreenModal bind:show={showAddToHomeScreenModal} />
 
 <div class="uk-grid-column-small uk-child-width-1-1@s uk-child-width-1-2@s" uk-grid>
   <div>
@@ -52,10 +55,9 @@
     </div>
   </div>
   <div>
-    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => location.navigate(`#/${uuid}/add-to-home-screen`)}>
+    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => showAddToHomeScreenModal = true}>
       <h5 class="uk-card-title">💾&nbsp;&nbsp;Добавить на рабочий стол</h5>
       <p>Чтобы не потерять ВПН</p>
     </div>
   </div>
 </div>
-
