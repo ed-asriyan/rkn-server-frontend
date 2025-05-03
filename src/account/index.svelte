@@ -21,7 +21,7 @@
   const login = async function(uuid: string): Promise<void> {
     if (!$passwordStore) {
       didTryUuid = true;
-      $passwordStore = uuid;
+      setTimeout(() => $passwordStore = uuid, 100);
     } else if (!$database) {
       try {
         $database = await Database.connect(supabaseUrl, supabaseKey, uuid, $passwordStore);
@@ -29,7 +29,7 @@
         console.error(e);
         if (!didTryUuid) {
           didTryUuid = true;
-          $passwordStore = uuid;
+          setTimeout(() => $passwordStore = uuid, 100);
         } else if (firstLoad) {
           firstLoad = false;
         } else {

@@ -2,6 +2,7 @@
     import * as UIkit from 'uikit';
     import QRCode from '@castlenine/svelte-qrcode';
     import type { Member, Database } from '../database';
+    import { origin } from '../../config';
 
     interface Props {
         member: Member | null;
@@ -30,7 +31,7 @@
         });
     };
 
-    let shareLink = $derived(`https://${location.host}#?uuid=${member?.uuid}`);
+    let shareLink = $derived(`${origin}#?uuid=${member?.uuid}`);
 
     const canShare: boolean = Boolean(navigator.share);
     const linkClick = function (): void {
