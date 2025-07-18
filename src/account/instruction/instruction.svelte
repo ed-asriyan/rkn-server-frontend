@@ -53,7 +53,7 @@
                             <a class="uk-link" href="https://apps.apple.com/us/app/hiddify-proxy-vpn/id6596777532" target="_blank">💻 macOS</a>
                         </li>
                         <li>
-                            <a class="uk-link" href="https://play.google.com/store/apps/details?id=app.hiddify.com" target="_blank">🖥️ Windows</a>
+                            <a class="uk-link" href="https://github.com/hiddify/hiddify-app/releases/latest/download/Hiddify-Windows-Setup-x64.Msix" target="_blank">🖥️ Windows</a>
                         </li>
                         <li>
                             <a class="uk-link" href="https://github.com/hiddify/hiddify-app/releases/latest" target="_blank">🖥️ Linux</a>
