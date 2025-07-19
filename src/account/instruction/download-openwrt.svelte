@@ -1,5 +1,4 @@
 <script lang="ts">
-    import * as UIkit from 'uikit';
     import type { VpnConfig } from '../database';
 
     interface Props {
@@ -7,18 +6,6 @@
     }
 
     let { config = $bindable() }: Props = $props();
-    let modal = $state(null);
-
-    $effect(() => {
-        const modalObject = UIkit.modal(modal);
-        if (config) {
-            modalObject.show();
-        } else {
-            modalObject.hide();
-        }
-    });
-
-    const name = 'xray-client';
 
     let initdService = $derived(`
 #!/bin/sh /etc/rc.common
@@ -105,66 +92,57 @@ start_service() {
 }`.trim());
 </script>
 
-<div bind:this={modal} uk-modal>
-    {#if config}
-        <div class="uk-modal-dialog uk-modal-body">
-            <h2 class="uk-modal-title">How to install xray on OpenWRT via SSH in 5 steps</h2>
-            <ol>
-                <li>
-                    <p>Install prerequisits:</p>
-                    <pre>opkg update
+<ol>
+    <li>
+        <p>Install prerequisits:</p>
+        <pre>opkg update
 opkg install iptables-mod-tproxy kmod-ipt-tproxy</pre>
-                </li>
-                <li>
-                    <p>Install xray:</p>
-                    <pre>opkg install xray-core</pre>
-                    <ul uk-accordion class="uk-margin-bottom">
+    </li>
+    <li>
+        <p>Install xray:</p>
+        <pre>opkg install xray-core</pre>
+        <ul uk-accordion class="uk-margin-bottom">
+            <li>
+                <a class="uk-accordion-title uk-text-default" href><b>If it's not available via <code>opkg</code>, click here</b></a>
+                <div class="uk-accordion-content">
+                    <ol>
                         <li>
-                            <a class="uk-accordion-title uk-text-default" href>If it's not available via <code>opkg</code>, click here</a>
-                            <div class="uk-accordion-content">
-                                <ol>
-                                    <li>
-                                        <p>Create directories:</p>
-                                        <pre>mkdir /etc/xray/
+                            <p>Create directories:</p>
+                            <pre>mkdir /etc/xray/
 mkdir /usr/share/xray/</pre>
-                                    </li>
-                                    <li>
-                                        Download xray from <a href="https://github.com/XTLS/Xray-core/releases" target="_blank">GitHub</a> and
-                                        <ul>
-                                            <li>save the executable to <code>/usr/bin/xray</code></li>
-                                            <li>save and other files to <code>/usr/share/xray/</code> directory</li>
-                                        </ul> 
-                                    </li>
-                                    <li>
-                                        Make xray executable:
-                                        <pre>chmod +x /usr/bin/xray</pre>
-                                    </li>
-                                </ol>
-                            </div>
                         </li>
-                    </ul>
-                </li>
-                <li>
-                    <p>Create file <code>/etc/init.d/xray</code> with the following content. If the file already exists, replace it</p>
-                    <pre>{ initdService }</pre>
-                </li>
-                <li>
-                    <p>Make it executable:</p>
-                    <pre>chmod +x /etc/init.d/xray</pre>
-                </li>
-                <li>
-                    <p>Enable and start the service:</p>
-                    <pre>/etc/init.d/xray enable
+                        <li>
+                            Download xray from <a href="https://github.com/XTLS/Xray-core/releases" target="_blank">GitHub</a> and
+                            <ul>
+                                <li>save the executable to <code>/usr/bin/xray</code></li>
+                                <li>save and other files to <code>/usr/share/xray/</code> directory</li>
+                            </ul> 
+                        </li>
+                        <li>
+                            Make xray executable:
+                            <pre>chmod +x /usr/bin/xray</pre>
+                        </li>
+                    </ol>
+                </div>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <p>Create file <code>/etc/init.d/xray</code> with the following content. If the file already exists, replace it</p>
+        <pre>{ initdService }</pre>
+    </li>
+    <li>
+        <p>Make it executable:</p>
+        <pre>chmod +x /etc/init.d/xray</pre>
+    </li>
+    <li>
+        <p>Enable and start the service:</p>
+        <pre>/etc/init.d/xray enable
 /etc/init.d/xray start</pre>
-                </li>
-            </ol>
+    </li>
+</ol>
 
-            <p><b>Done!</b></p>
-            <p>To disable xray, run <code>/etc/init.d/xray disable</code> and reboot the router. To enable it back, run commands from the 5th point above (enable & start).</p>
+<p><b>Done!</b></p>
+<p>To disable xray, run <code>/etc/init.d/xray disable</code> and reboot the router. To enable it back, run commands from the 5th point above (enable & start).</p>
 
-            <p class="uk-text-small uk-text-muted">Based on <a href="https://www.youtube.com/watch?v=VFfvCfTRn14" target="_blank">https://www.youtube.com/watch?v=VFfvCfTRn14</a> and <a href="https://github.com/mostm/openwrt-xray" target="_blank">mostm/openwrt-xray</a>.</p>
-            
-            <button class="uk-button uk-button-default" onclick={() => config = null}>Закрыть</button>
-        </div>
-    {/if}
-</div>
+<p class="uk-text-small uk-text-muted">Based on <a href="https://www.youtube.com/watch?v=VFfvCfTRn14" target="_blank">https://www.youtube.com/watch?v=VFfvCfTRn14</a> and <a href="https://github.com/mostm/openwrt-xray" target="_blank">mostm/openwrt-xray</a>.</p>

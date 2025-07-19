@@ -11,3 +11,10 @@
 .cursor {
     cursor: pointer;
 }
+
+.code {
+    word-break: break-all;
+    white-space: normal;
+    display: inline-block;
+    max-width: 100%;
+}
