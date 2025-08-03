@@ -5,6 +5,7 @@
   import ChangePassword from './change-password.svelte';
   import AddToHomeScreenModal from "./add-to-home-screen-modal.svelte";
   import { database } from '../stores/database';
+  import { supportLink } from "../config";
 
   const { uuid }: { uuid: string } = $props();
 
@@ -49,6 +50,12 @@
           ??
         {/await}
       </b> людям</p>
+    </div>
+  </div>
+  <div>
+    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => window.open(supportLink, '_blank')}>
+      <h5 class="uk-card-title">🤯&nbsp;&nbsp;Не подключается?</h5>
+      <p>Напиши мне в телегу (нажми сюда)</p>
     </div>
   </div>
   <div>
