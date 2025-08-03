@@ -4,10 +4,19 @@
   import LogoEmoji from '../components/logo-emoji.svelte';
   import ChangePassword from './change-password.svelte';
   import AddToHomeScreenModal from "./add-to-home-screen-modal.svelte";
-  import { database } from '../stores/database';
   import { supportLink } from "../config";
+  import type { DescendantsStore } from "../stores/descendants-store";
+  import type { SupabaseClient } from "@supabase/supabase-js";
 
-  const { uuid }: { uuid: string } = $props();
+  interface Params {
+    uuid: string;
+    descendantsStore: DescendantsStore;
+    supabase: SupabaseClient;
+  }
+
+  const { uuid, descendantsStore, supabase }: Params = $props();
+
+  let count = $derived(descendantsStore.count);
 
   let showPasswordModal = $state(false);
   let showAddToHomeScreenModal = $state(false);
@@ -28,7 +37,7 @@
 <div class="text-muted text-center uk-margin-bottom uk-text-center">Безопасный и анонимный ВПН</div>
 
 <Consent />
-<ChangePassword bind:show={showPasswordModal}/>
+<ChangePassword bind:show={showPasswordModal} {supabase}/>
 <AddToHomeScreenModal bind:show={showAddToHomeScreenModal} />
 
 <div class="uk-grid-column-small uk-child-width-1-1@s uk-child-width-1-2@s" uk-grid>
@@ -41,15 +50,7 @@
   <div>
     <div class="uk-card uk-card-secondary uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => location.navigate(`#/${uuid}/children`)}>
       <h5 class="uk-card-title">👥&nbsp;&nbsp;Поделиться ВПНом</h5>
-      <p>Вы <b>разблокировали</b> интернет <b>
-        {#await $database!.descendantsCount()}
-          <div uk-spinner="ratio: 0.6"></div>
-        {:then { count }} 
-          {count}
-        {:catch error}
-          ??
-        {/await}
-      </b> людям</p>
+      <p>Вы <b>разблокировали</b> интернет <b>{ $count }</b> людям</p>
     </div>
   </div>
   <div>

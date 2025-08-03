@@ -1,20 +1,36 @@
 <script lang="ts">
   import { Router, Route } from "@wjfe/n-savant";
-  import { Database, database } from '../stores/database';
   import SignIn from './sign-in.svelte';
-  import { passwordStore, uuidStore } from '../stores/local-storage';
+  import { authSupabase, passwordStore, uuidStore } from '../stores/auth';
   import { supabaseKey, supabaseUrl, version } from '../config';
   import Home from "./home.svelte";
   import Instruction from "./instruction/index.svelte";
   import Children from "./children/index.svelte";
   import Faq from "./faq.svelte";
   import Pwa from "./pwa.svelte";
+  import type { SupabaseClient } from "@supabase/supabase-js";
+  import { UsersStore } from "../stores/users-store";
+  import { DescendantsStore } from "../stores/descendants-store";
+  import { ConfigsStore } from "../stores/configs-store";
+  import { UsersService } from "../stores/users-service";
+  import { DescendantsService } from "../stores/descendants-service";
+  import { ConfigsService } from "../stores/configs-service";
 
   interface Params {
     uuid: string;
   }
   const { uuid }: Params = $props();
   $uuidStore = uuid;
+
+  let supabase: SupabaseClient | null = $state(null);
+
+  const usersStore = new UsersStore();
+  const descendantsStore = new DescendantsStore();
+  const configsStore = new ConfigsStore();
+
+  let usersService: UsersService | null = $state(null);
+  let descendantsService: DescendantsService | null = $state(null);
+  let configsService: ConfigsService | null = $state(null);
 
   let firstLoad = true;
   let didTryUuid = false;
@@ -23,9 +39,19 @@
     if (!$passwordStore) {
       didTryUuid = true;
       setTimeout(() => $passwordStore = uuid, 100);
-    } else if (!$database) {
+    } else if (!supabase) {
       try {
-        $database = await Database.connect(supabaseUrl, supabaseKey, uuid, $passwordStore);
+        supabase = await authSupabase(supabaseUrl, supabaseKey, uuid, $passwordStore);
+
+        usersService = new UsersService(supabase, usersStore, descendantsStore, uuid);
+        descendantsService = new DescendantsService(supabase, uuid, descendantsStore);
+        configsService = new ConfigsService(supabase, configsStore);
+
+        await Promise.all([
+          usersService.fetch(),
+          descendantsService.fetch(),
+          configsService.fetch()
+        ]);
       } catch (e) {
         console.error(e);
         if (!didTryUuid) {
@@ -50,18 +76,18 @@
             <div uk-spinner="ratio: 1" class="uk-margin-right"></div>
             Думаю думалку...
           {:then _}
-            {#if $database}
+            {#if supabase && usersService && descendantsService && configsService}
               <Pwa uuid={uuid} />
               <div>
                 <Router>
                   <Route key="home" path="/:uuid">
-                    <Home uuid={uuid} />
+                    <Home uuid={uuid} {descendantsStore} {supabase} />
                   </Route>
                   <Route key="instruction" path="/:uuid/instruction">
-                    <Instruction uuid={uuid} />
+                    <Instruction uuid={uuid} {configsStore} />
                   </Route>
                   <Route key="children" path="/:uuid/children">
-                    <Children uuid={uuid} />
+                    <Children uuid={uuid} {descendantsStore} {usersStore} {usersService} />
                   </Route>
                   <Route key="faq" path="/:uuid/faq">
                     <Faq uuid={uuid} />

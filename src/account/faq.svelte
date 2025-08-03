@@ -1,7 +1,7 @@
 <script lang="ts">
     import { location } from '@wjfe/n-savant';
     import LogoEmoji from '../components/logo-emoji.svelte';
-  import { supportLink } from '../config';
+    import { supportLink } from '../config';
 
     let { uuid }: { uuid: string } = $props();
 </script>

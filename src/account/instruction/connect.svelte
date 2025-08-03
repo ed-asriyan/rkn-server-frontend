@@ -1,13 +1,11 @@
 <script lang="ts">
-    import { location } from '@wjfe/n-savant';
-    import type { VpnConfig } from '../database';
+    import type { Config } from '../../stores/configs-store';
 
     interface Props {
-        config: VpnConfig,
-        uuid: string
+        config: Config,
     }
 
-    let { config, uuid }: Props = $props();
+    let { config }: Props = $props();
 
     const onConnectClick = function(): void {
         window.location.href = config.hiddifyOpenUrl;

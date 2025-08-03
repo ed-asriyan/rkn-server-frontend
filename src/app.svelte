@@ -3,7 +3,7 @@
   import { Router, Route, location } from "@wjfe/n-savant";
   import 'uikit/dist/js/uikit';
   import Account from './account/index.svelte';
-  import { uuidStore } from './stores/local-storage';
+  import { uuidStore } from './stores/auth';
 
   onMount(() => {
     const hash = window.location.hash.replace('#/', '').replace('#', '');

@@ -1,7 +1,6 @@
 <script lang="ts">
     import { location } from '@wjfe/n-savant';
     import LogoEmoji from '../../components/logo-emoji.svelte';
-    import { database } from '../../stores/database';
     import DownloadDocker from './download-docker.svelte';
     import Done from './done.svelte';
     import DownloadAndroid from './download-android.svelte';
@@ -16,8 +15,12 @@
     import DownloadLinux from './download-linux.svelte';
     import DownloadWindows from './download-windows.svelte';
     import Connect from './connect.svelte';
+    import type { ConfigsStore } from '../../stores/configs-store';
 
-    let { uuid }: { uuid: string } = $props();
+    let { uuid, configsStore }: { uuid: string, configsStore: ConfigsStore } = $props();
+
+    let allConfigs = $derived(configsStore.items);
+    let config = $derived($allConfigs[0]);
 
     type Steps =
         'selectDevice' |
@@ -247,34 +250,28 @@
 <h1 class="uk-heading-small uk-text-center"><LogoEmoji/>&nbsp;&nbspAnywhere VPN</h1>
 <button class="uk-button uk-button-default uk-width-1-1 uk-margin" onclick={() => location.navigate(`#/${uuid}`) }>🏠 На главную</button>
 
-{#await $database!.fetchConfig()}
-    <div uk-spinner></div>
-{:then config}
-    <div class="uk-padding uk-card uk-card-default uk-card-body">
-        <h2 class="uk-text-center">{ currentStep.name }</h2>
-        {#if currentStep.description}
-            <p class="uk-text-center">{ currentStep.description }</p>
-        {/if}
-        {#if currentStep.component}
-            <svelte:component this={currentStep.component} {config} {uuid} />
-        {/if}
-        {#if currentStep.options}
-            <div class="uk-grid-small uk-child-width-1-1" class:uk-child-width-1-3@m={currentStep.options.length >= 3} class:uk-child-width-1-2@s={currentStep.options.length >= 3} uk-grid>
-                {#each currentStep.options as option}
-                    <div>
-                        <button class="uk-button uk-button-default uk-width-1-1 uk-text-middle" onclick={() => next(option.next)}>
-                        {option.name}
-                        </button>
-                    </div>
-                {/each}
-            </div>
-        {/if}
-    </div>
-    {#if stack.length > 1}
-        <div class="uk-margin-top">
-        <button class="uk-button uk-button-default uk-width-1-1" onclick={previous} disabled={stack.length <= 1}>Назад</button>
+<div class="uk-padding uk-card uk-card-default uk-card-body">
+    <h2 class="uk-text-center">{ currentStep.name }</h2>
+    {#if currentStep.description}
+        <p class="uk-text-center">{ currentStep.description }</p>
+    {/if}
+    {#if currentStep.component}
+        <svelte:component this={currentStep.component} {config} {uuid} />
+    {/if}
+    {#if currentStep.options}
+        <div class="uk-grid-small uk-child-width-1-1" class:uk-child-width-1-3@m={currentStep.options.length >= 3} class:uk-child-width-1-2@s={currentStep.options.length >= 3} uk-grid>
+            {#each currentStep.options as option}
+                <div>
+                    <button class="uk-button uk-button-default uk-width-1-1 uk-text-middle" onclick={() => next(option.next)}>
+                    {option.name}
+                    </button>
+                </div>
+            {/each}
         </div>
     {/if}
-{:catch error}
-    <div class="uk-text-danger">Ошибка: {error}</div>
-{/await}
+</div>
+{#if stack.length > 1}
+    <div class="uk-margin-top">
+    <button class="uk-button uk-button-default uk-width-1-1" onclick={previous} disabled={stack.length <= 1}>Назад</button>
+    </div>
+{/if}

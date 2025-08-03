@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as UIkit from 'uikit';
   import { onMount } from 'svelte';
-  import { createLocalStorageStore } from '../stores/local-storage';
+  import { createLocalStorageStore } from '../stores/auth';
 
   const accepted = createLocalStorageStore('consent', 'false');
 

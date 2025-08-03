@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { VpnConfig } from '../database';
+    import type { Config } from '../../stores/configs-store';
 
     interface Props {
-        config: VpnConfig;
+        config: Config;
     }
 
     let { config = $bindable() }: Props = $props();

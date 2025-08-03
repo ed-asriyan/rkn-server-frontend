@@ -1,15 +1,16 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
     import QRCode from '@castlenine/svelte-qrcode';
-    import type { Member, Database } from '../database';
+    import type { User } from '../../stores/users-store';
     import { origin } from '../../config';
+    import type { UsersService } from '../../stores/users-service';
 
     interface Props {
-        member: Member | null;
-        database: Database;
+        member: User | null;
+        usersService: UsersService;
     }
 
-    let { member = $bindable(), database }: Props = $props();
+    let { member = $bindable(), usersService }: Props = $props();
 
     let isLoading = $state(false);
 
@@ -51,7 +52,7 @@
         try {
             const newName = prompt('Введите новое имя:', member.name);
             if (newName) {
-                await database.renameConfig(member.uuid, newName);
+                await usersService.rename(member.uuid, newName);
                 UIkit.notification('Имя изменено', { status: 'success' });
                 member = { ...member, name: newName };
             }

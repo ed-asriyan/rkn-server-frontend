@@ -1,12 +1,18 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import * as UIkit from 'uikit';
-    import { database } from '../stores/database';
+    import { changePassword, isPasswordDefaultStore } from '../stores/auth';
+    import type { SupabaseClient } from '@supabase/supabase-js';
 
-    let { show = $bindable() } = $props();
+    interface Params {
+        supabase: SupabaseClient;
+        show: boolean;
+    }
+
+    let { show = $bindable(), supabase }: Params = $props();
 
     onMount(() => {
-        if (database?.isPasswordSetupNeeded) {
+        if ($isPasswordDefaultStore) {
             UIkit.modal(modal).show();
         }
     });
@@ -25,7 +31,7 @@
         }
     });
 
-    const changePassword = async function (e) {
+    const changePasswordHandler = async function (e) {
         e.preventDefault();
         
         if (newPassword !== confirmPassword) {
@@ -35,28 +41,28 @@
 
         try {
             isLoading = true;
-            await $database?.changePassword(newPassword);
+            await changePassword(supabase, newPassword);
             show = false;
+            UIkit.modal(modal).hide();
+            newPassword = '';
+            confirmPassword = '';
         } catch (e) {
             console.error(e);
-            alert(e.toString());
         } finally {
             isLoading = false;
         }
-
-        localStorage.setItem('password', newPassword);
     };
 </script>
 
 <div bind:this={modal} uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
         <h2 class="uk-modal-title">Сменить пароль</h2>
-        {#if $database?.isPasswordSetupNeeded}
+        {#if $isPasswordDefaultStore}
             <p>Скорее всего ты открыл эту ссылку в первый раз. Ты можешь создать пароль, чтобы только ты мог иметь доступ к этому ВПН.</p>
         {/if}
 
         <p>Минимум 6 символов</p>
-        <form onsubmit={changePassword}>
+        <form onsubmit={changePasswordHandler}>
             <div class="uk-margin">
                 <label for="new-password">Новый пароль</label>
                 <input class="uk-input" type="password" minlength="6" bind:value={newPassword} required />
@@ -70,7 +76,7 @@
             {:else}
                 <div class="uk-margin">
                     <button type="submit" class="uk-button uk-button-primary">Сохранить</button>
-                    <button class="uk-button uk-button-default" onclick={() => { show = false }}>закрыть</button>
+                    <button class="uk-button uk-button-default" onclick={() => { show = false; UIkit.modal(modal).hide(); }}>закрыть</button>
                 </div>
             {/if}
         </form>

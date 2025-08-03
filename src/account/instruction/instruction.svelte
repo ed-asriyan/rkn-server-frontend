@@ -1,12 +1,12 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
     import { location } from '@wjfe/n-savant';
-    import type { VpnConfig } from '../../stores/database';
+    import type { Config } from '../../stores/configs-store';
     import Docker from './docker.svelte';
     import Openwrt from './openwrt.svelte';
 
     interface Props {
-        config: VpnConfig,
+        config: Config,
         uuid: string
     }
 

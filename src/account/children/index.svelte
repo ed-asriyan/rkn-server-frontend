@@ -1,13 +1,24 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
     import { location } from '@wjfe/n-savant';
-    import { Database, AdoptError, type Member, database as databaseStore } from '../../stores/database';
     import ChildModal from './child-modal.svelte';
     import LogoEmoji from "../../components/logo-emoji.svelte";
+    import type { User, UsersStore } from '../../stores/users-store';
+    import type { UsersService } from '../../stores/users-service';
+    import type { DescendantsStore } from '../../stores/descendants-store';
+  import type { Readable } from 'svelte/store';
 
-    const { uuid }: { uuid: string } = $props();
+    interface Props {
+        uuid: string;
+        usersStore: UsersStore;
+        descendantsStore: DescendantsStore;
+        usersService: UsersService;
+    }
 
-    let database: Database = $databaseStore;
+    const { uuid, usersStore, descendantsStore, usersService }: Props = $props();
+
+    let children: Readable<User[]> = $derived(usersStore.items);
+    let descendantsCount: Readable<number> = $derived(descendantsStore.count);
 
     const responseMap: {[x: number]: string } = {
         0: 'Новый ВПН создан',
@@ -22,16 +33,12 @@
             loading = true;
             const name = prompt('Введите имя нового пользователя ВПН (имя будет видно только вам):');
             if (name) {
-                userModal = await database.adopt(name);
+                userModal = await usersService.adopt(name);
                 UIkit.notification('Новый ВПН создан', { status: 'success' });
             }
         } catch (e) {
-            console.error(e);
-            if (e instanceof AdoptError) {
-                alert(responseMap[e.code]);
-            } else {
-                alert('Ошибка');
-            }
+            const message = responseMap[e as number];
+            alert(message || e?.toString());
         } finally {
             loading = false;
         }
@@ -42,7 +49,7 @@
         ++key;
     };
 
-    let userModal: Member = $state(null);
+    let userModal: User | null = $state(null);
 
     let lastUserModalName: string | null = null;
     $effect(() => {
@@ -53,7 +60,7 @@
     });
 </script>
 
-<ChildModal bind:member={userModal} database={database} />
+<ChildModal bind:member={userModal} {usersService} />
 
 <h1 class="uk-heading-small uk-text-center"><LogoEmoji/>&nbsp;&nbspAnywhere VPN</h1>
 <button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => location.navigate(`#/${uuid}`) }>🏠 На главную</button>
@@ -67,79 +74,71 @@
 </p>
 
 
-{#key key}
-    {#await Promise.all([database.fetchChildren(), database.descendantsCount()])}
-        <div uk-spinner></div>
-    {:then [{ children, count: childrenCount }, { count: descendantsCount }]} 
-        <div class="uk-card uk-card-default uk-card-body uk-card-small uk-text-left">
-            {#if childrenCount === 0}
-                <p class="uk-text-bold uk-text-emphasis">Разблокированных людей: {childrenCount} 🔒🌍</p>
-                <p>
-                    Вы ещё не поделились VPN, но всё впереди!
-                </p>  
-                <p class="uk-text-bold uk-text-emphasis">
-                     Помоги друзьям и семье — создай им ВПН и преврати 0 в 1, 2, 10... и даже 100+! 🚀
-                </p>
-            {:else}
-                {#if descendantsCount === childrenCount}
-                    <p class="uk-text-bold uk-text-emphasis">Отличное начало! 🌱</p>
-                    <p>
-                        Вы уже помогли <b>{descendantsCount} людям</b> получить доступ к интернету!
-                    </p>  
-                    <p>
-                        Как только они поделятся VPN дальше, этот счётчик начнёт расти. <span class="uk-text-bold uk-text-emphasis">Давай посмотрим, сколько людей ты сможешь разблокировать! 🚀</span>
-                    </p>
-                {:else}
-                    <p class="uk-text-bold uk-text-emphasis">Вы разблокировали интернет для {descendantsCount} человек! 🔥🌍</p>
-                    <p>
-                        Вы помоги <b>{childrenCount} людям</b> получить доступ к сети! Они передали VPN дальше, и теперь <b>{descendantsCount} человек</b> свободно пользуются интернетом <b>благодаря Вам</b>.
-                    </p>  
-                    <p class="uk-text-bold uk-text-emphasis">
-                        Продолжай делиться и увеличивай этот счётчик! 🚀
-                    </p>
-                {/if}
-            {/if}
-        </div>
-        
-        <button class="uk-button uk-button-large uk-button-primary uk-width-1-1 uk-margin-top" onclick={() => adoptClick()}>
-            🤙 Создать ВПН
-        </button>
-        {#if children.length > 0}
-            <div style="overflow-x: auto;">
-                <table class="uk-table uk-table-small uk-table-divider">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Имя</th>
-                            <th>Дата пригашения</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {#each children.sort((a, b) => +a.createdAt - +b.createdAt) as child, i}
-                            <tr>
-                                <th>{i + 1}</th>
-                                <td>
-                                    <button class="uk-button uk-button-default uk-button-small uk-text-truncate" onclick={() => userModal = child}>Открыть</button>
-                                    &nbsp;
-                                    <span class="uk-text-truncate uk-butdton uk-link uk-text-muted" onclick={() => userModal = child}>{child.name || child.uuid}</span>
-                                </td>
-                                <td>{child.createdAt.toLocaleString()}</td>
-                            </tr>
-                        {/each}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+<div class="uk-card uk-card-default uk-card-body uk-card-small uk-text-left">
+    {#if $children.length === 0}
+        <p class="uk-text-bold uk-text-emphasis">Разблокированных людей: {$children.length} 🔒🌍</p>
+        <p>
+            Вы ещё не поделились VPN, но всё впереди!
+        </p>  
+        <p class="uk-text-bold uk-text-emphasis">
+             Помоги друзьям и семье — создай им ВПН и преврати 0 в 1, 2, 10... и даже 100+! 🚀
+        </p>
+    {:else}
+        {#if $descendantsCount === $children.length}
+            <p class="uk-text-bold uk-text-emphasis">Отличное начало! 🌱</p>
+            <p>
+                Вы уже помогли <b>{$descendantsCount} людям</b> получить доступ к интернету!
+            </p>  
+            <p>
+                Как только они поделятся VPN дальше, этот счётчик начнёт расти. <span class="uk-text-bold uk-text-emphasis">Давай посмотрим, сколько людей ты сможешь разблокировать! 🚀</span>
+            </p>
+        {:else}
+            <p class="uk-text-bold uk-text-emphasis">Вы разблокировали интернет для {$descendantsCount} человек! 🔥🌍</p>
+            <p>
+                Вы помогли <b>{$children.length} людям</b> получить доступ к сети! Они передали VPN дальше, и теперь <b>{$descendantsCount} человек</b> свободно пользуются интернетом <b>благодаря Вам</b>.
+            </p>  
+            <p class="uk-text-bold uk-text-emphasis">
+                Продолжай делиться и увеличивай этот счётчик! 🚀
+            </p>
         {/if}
-    {:catch e}
-        <div>Ошибка :(</div>
-        <button class="uk-button uk-button-primary" onclick={refresh}>Обновить</button>
-    {/await}
-{/key}
+    {/if}
+</div>
+
+<button class="uk-button uk-button-large uk-button-primary uk-width-1-1 uk-margin-top" onclick={() => adoptClick()}>
+    🤙 Создать ВПН
+</button>
+{#if $children.length > 0}
+    <div style="overflow-x: auto;">
+        <table class="uk-table uk-table-small uk-table-divider">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Имя</th>
+                    <th>Дата пригашения</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each $children.sort((a, b) => +b.createdAt - +a.createdAt) as child, i}
+                    <tr>
+                        <th>{i + 1}</th>
+                        <td>
+                            <button class="uk-button uk-button-default uk-button-small uk-text-truncate" onclick={() => userModal = child}>Открыть</button>
+                            &nbsp;
+                            <span class="uk-text-truncate uk-button uk-link uk-text-muted" onclick={() => userModal = child}>{child.name || child.uuid}</span>
+                        </td>
+                        <td>{child.createdAt.toLocaleString()}</td>
+                    </tr>
+                {/each}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+{/if}
+
 
 <style lang="scss">
     table {
