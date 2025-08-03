@@ -122,9 +122,9 @@
                     <tr>
                         <th>{i + 1}</th>
                         <td>
-                            <button class="uk-button uk-button-default uk-button-small uk-text-truncate" onclick={() => userModal = child}>Открыть</button>
+                            <button class="uk-button uk-button-secondary uk-button-small uk-text-truncate" onclick={() => userModal = child}>Открыть</button>
                             &nbsp;
-                            <span class="uk-text-truncate uk-button uk-link uk-text-muted" onclick={() => userModal = child}>{child.name || child.uuid}</span>
+                            <span class="uk-text-truncate uk-button uk-link uk-text-primary uk-text-bold" onclick={() => userModal = child}>{child.name || child.uuid}</span>
                         </td>
                         <td>{child.createdAt.toLocaleString()}</td>
                     </tr>

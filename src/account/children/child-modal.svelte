@@ -68,8 +68,8 @@
         <div class="uk-modal-dialog uk-modal-body">
             <h2 class="uk-modal-title">
                 Пользователь: <b>{ member.name }</b>
-                <button class="uk-button uk-button-default" onclick={rename}>✍🏻 Переименовать</button>
             </h2>
+<button class="uk-button uk-button-default uk-button-small" onclick={rename}>✍🏻 Переименовать</button>
             <p class="uk-text-small uk-text-muted">Дата приглашения: { member.createdAt.toLocaleString() }</p>
             {#if isLoading}
                 <div uk-spinner></div>

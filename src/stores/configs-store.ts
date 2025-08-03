@@ -1,3 +1,4 @@
+import { origin } from '../config';
 import { AbstractStore } from './abstract-store';
 
 export class Config {
