@@ -22,7 +22,7 @@
 		"is-mobile": "^5.0.0",
 		"nanostores": "^1.0.1",
 		"sass": "^1.89.2",
-		"svelte": "^5.34.3",
+		"svelte": "^5.38.2",
 		"svelte-check": "^4.2.1",
 		"tslib": "^2.6.2",
 		"typescript": "^5.5.0",
