@@ -4,7 +4,7 @@
   import LogoEmoji from '../components/logo-emoji.svelte';
   import ChangePassword from './change-password.svelte';
   import AddToHomeScreenModal from "./add-to-home-screen-modal.svelte";
-  import { supportLink } from "../config";
+  import { supportTelegramLink, supportSimplexLink } from "../config";
   import type { DescendantsStore } from "../stores/descendants-store";
   import type { SupabaseClient } from "@supabase/supabase-js";
 
@@ -54,9 +54,9 @@
     </div>
   </div>
   <div>
-    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => window.open(supportLink, '_blank')}>
+    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-card-small uk-text-left">
       <h5 class="uk-card-title">🤯&nbsp;&nbsp;Не подключается?</h5>
-      <p>Напиши мне в телегу (нажми сюда)</p>
+      <p>Напиши в <a href={supportSimplexLink} target="_blank">SimpleX</a> или в <a href={supportTelegramLink} target="_blank">Telegram</a></p>
     </div>
   </div>
   <div>
