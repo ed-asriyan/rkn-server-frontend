@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
-    import { location } from '@wjfe/n-savant';
+    import { location } from '@svelte-router/core';
     import type { Config } from '../../stores/configs-store';
     import Docker from './docker.svelte';
     import Openwrt from './openwrt.svelte';
@@ -128,7 +128,7 @@
                     <code>{config.hiddifySubscriptionUrl}</code>
                 </p>
                 <p class="uk-text-center">
-                    <button class="uk-button uk-button-primary" onclick={() => location.navigate(`#/${uuid}/children`)}>Сделать ВПН для друга!</button>
+                    <button class="uk-button uk-button-primary" onclick={() => location.navigate(`/${uuid}/children`)}>Сделать ВПН для друга!</button>
                 </p>
             </div>
         </li>

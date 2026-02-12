@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as UIkit from 'uikit';
-    import { location } from '@wjfe/n-savant';
+    import { location } from '@svelte-router/core';
     import ChildModal from './child-modal.svelte';
     import LogoEmoji from "../../components/logo-emoji.svelte";
     import type { User, UsersStore } from '../../stores/users-store';
@@ -63,7 +63,7 @@
 <ChildModal bind:member={userModal} {usersService} />
 
 <h1 class="uk-heading-small uk-text-center"><LogoEmoji/>&nbsp;&nbspAnywhere VPN</h1>
-<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => location.navigate(`#/${uuid}`) }>🏠 На главную</button>
+<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => location.navigate(`/${uuid}`) }>🏠 На главную</button>
 
 <p>
     Вы можете создавать VPN для семьи, друзей и других людей.

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { location } from '@wjfe/n-savant';
+    import { location } from '@svelte-router/core';
     import LogoEmoji from '../../components/logo-emoji.svelte';
     import DownloadDocker from './download-docker.svelte';
     import Done from './done.svelte';
@@ -248,7 +248,7 @@
 </script>
 
 <h1 class="uk-heading-small uk-text-center"><LogoEmoji/>&nbsp;&nbspAnywhere VPN</h1>
-<button class="uk-button uk-button-default uk-width-1-1 uk-margin" onclick={() => location.navigate(`#/${uuid}`) }>🏠 На главную</button>
+<button class="uk-button uk-button-default uk-width-1-1 uk-margin" onclick={() => location.navigate(`/${uuid}`) }>🏠 На главную</button>
 
 <div class="uk-padding uk-card uk-card-default uk-card-body">
     <h2 class="uk-text-center">{ currentStep.name }</h2>

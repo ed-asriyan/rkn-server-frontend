@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { Router, Route, location } from "@wjfe/n-savant";
+  import { Router, Route, location } from '@svelte-router/core';
   import 'uikit/dist/js/uikit';
   import Account from './account/index.svelte';
   import { uuidStore } from './stores/auth';
@@ -23,9 +23,9 @@
 
 <Router>
   <Route key="account" path="/:uuid/*">
-    {#snippet children(params)}
-      {#if params?.uuid}
-        <Account uuid={params!.uuid as string} />
+    {#snippet children({ rp })}
+      {#if rp?.uuid}
+        <Account uuid={rp!.uuid as string} />
       {/if}
     {/snippet}
   </Route>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Router, Route } from "@wjfe/n-savant";
+  import { Router, Route } from '@svelte-router/core';
   import SignIn from './sign-in.svelte';
   import { authSupabase, passwordStore, uuidStore } from '../stores/auth';
   import { supabaseKey, supabaseUrl, version } from '../config';

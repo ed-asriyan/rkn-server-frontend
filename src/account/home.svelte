@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { location } from "@wjfe/n-savant";
+  import { location } from '@svelte-router/core';
   import Consent from './consent.svelte';
   import LogoEmoji from '../components/logo-emoji.svelte';
   import ChangePassword from './change-password.svelte';
@@ -42,13 +42,13 @@
 
 <div class="uk-grid-column-small uk-child-width-1-1@s uk-child-width-1-2@s" uk-grid>
   <div>
-    <div class="uk-card uk-card-primary uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => location.navigate(`#/${uuid}/instruction`)}>
+    <div class="uk-card uk-card-primary uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => location.navigate(`/${uuid}/instruction`)}>
       <h5 class="uk-card-title">🚀&nbsp;&nbsp;Подключить ВПН</h5>
       <p>Доступно гигабайт: <b>∞</b></p>
     </div>
   </div>
   <div>
-    <div class="uk-card uk-card-secondary uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => location.navigate(`#/${uuid}/children`)}>
+    <div class="uk-card uk-card-secondary uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => location.navigate(`/${uuid}/children`)}>
       <h5 class="uk-card-title">👥&nbsp;&nbsp;Поделиться ВПНом</h5>
       <p>Вы <b>разблокировали</b> интернет <b>{ $count }</b> людям</p>
     </div>
@@ -60,7 +60,7 @@
     </div>
   </div>
   <div>
-    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => location.navigate(`#/${uuid}/faq`)}>
+    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => location.navigate(`/${uuid}/faq`)}>
       <h5 class="uk-card-title">❓&nbsp;&nbsp;FAQ</h5>
       <p>Ответы на вопросы</p>
     </div>
