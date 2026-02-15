@@ -50,6 +50,7 @@
             options: {
                 name: string;
                 next: Steps;
+                style: 'default' | 'primary' | 'secondary' | 'danger';
             }[];
         }
     }
@@ -61,42 +62,52 @@
                 { 
                     name: '📱 iPhone/iPad',
                     next: 'downloadIos',
+                    style: 'default',
                 },
                 { 
                     name: '🤖 Android',
                     next: 'downloadAndroid',
+                    style: 'default',
                 },
                 { 
                     name: '💻 macOS',
                     next: 'downloadMacos',
+                    style: 'default',
                 },
                 { 
                     name: '🪟 Windows',
                     next: 'downloadWindows',
+                    style: 'default',
                 },
                 { 
                     name: '🐧 Linux',
                     next: 'downloadLinux',
+                    style: 'default',
                 },
                 { 
                     name: '📺 Apple TV',
                     next: 'downloadAppleTv',
+                    style: 'default',
                 },
                 { 
                     name: '📺 Android TV',
                     next: 'downloadAndroidTv',
+                    style: 'default',
                 },
                 { 
                     name: '🐳 Docker',
                     next: 'downloadDocker',
+                    style: 'default',
                 },
                 { 
                     name: '📶 OpenWrt',
                     next: 'downloadOpenwrt',
+                    style: 'default',
                 },
                 { 
                     name: '⚙️ Xray config',
                     next: 'downloadXrayClientConfig',
+                    style: 'default',
                 },
             ],
         },
@@ -104,115 +115,115 @@
             name: 'Android',
             component: DownloadAndroid,
             options: [
-                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation' },
-                { name: '⛔ Нажми сюда, если приложение не доступно в моей стране', next: 'downloadAndroidTroubleshoot' },
+                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation', style: 'primary' },
+                { name: '⛔ Нажми сюда, если приложение не доступно в моей стране', next: 'downloadAndroidTroubleshoot', style: 'danger' },
             ],
         },
         downloadAndroidTroubleshoot: {
             name: 'Android - Не доступно',
             component: DownloadAndroidTroubleshoot,
             options: [
-                { name: '✅ Как сделаешь, нажми сюда →', next: 'hiddifyPostInstallation' },
+                { name: '✅ Как сделаешь, нажми сюда →', next: 'hiddifyPostInstallation', style: 'primary' },
             ],
         },
         downloadIos: {
             name: 'iOS',
             component: DownloadIos,
             options: [
-                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation' },
-                { name: '⛔ Нажми сюда, если приложение не доступно в моей стране', next: 'downloadIosTroubleshoot' },
+                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation', style: 'primary' },
+                { name: '⛔ Нажми сюда, если приложение не доступно в моей стране', next: 'downloadIosTroubleshoot', style: 'danger' },
             ],
         },
         downloadIosTroubleshoot: {
             name: 'iOS - Не доступно',
             component: DownloadIosTroubleshoot,
             options: [
-                { name: '✅ Нажми сюда, как установишь →', next: 'downloadIosAfterCountryChange' },
+                { name: '✅ Нажми сюда, как установишь →', next: 'downloadIosAfterCountryChange', style: 'primary' },
             ],
         },
         downloadIosAfterCountryChange: {
             name: 'iOS - После смены страны',
             component: DownloadIos,
             options: [
-                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation' },
+                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation', style: 'primary' },
             ],
         },
         downloadAppleTv: {
             name: 'Apple TV',
             component: DownloadIos,
             options: [
-                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation' },
+                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation', style: 'primary' },
             ],
         },
         downloadAndroidTv: {
             name: 'Android TV',
             component: DownloadAndroid,
             options: [
-                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation' },
+                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation', style: 'primary' },
             ],
         },
         downloadMacos: {
             name: 'MacOS',
             component: DownloadMacos,
             options: [
-                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation' },
-                { name: '⛔ Нажми сюда, если приложение не доступно в моей стране', next: 'downloadMacosTroubleshoot' },
+                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation', style: 'primary' },
+                { name: '⛔ Нажми сюда, если приложение не доступно в моей стране', next: 'downloadMacosTroubleshoot', style: 'danger' },
             ],
         },
         downloadMacosTroubleshoot: {
             name: 'MacOS - Не доступно',
             component: DownloadMacsTroubleshoot,
             options: [
-                { name: '✅ Нажми сюда, как сделаешь →', next: 'hiddifyPostInstallation' },
+                { name: '✅ Нажми сюда, как сделаешь →', next: 'hiddifyPostInstallation', style: 'primary' },
             ],
         },
         downloadWindows: {
             name: 'Windows',
             component: DownloadWindows,
             options: [
-                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation' },
+                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation', style: 'primary' },
             ],
         },
         downloadLinux: {
             name: 'Linux',
             component: DownloadLinux,
             options: [
-                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation' },
+                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation', style: 'primary' },
             ],
         },
         downloadDocker: {
             name: 'Socks5 via Docker',
             component: DownloadDocker,
             options: [
-                { name: '✅ Готово!', next: 'done' },
+                { name: '✅ Готово!', next: 'done', style: 'primary' },
             ],
         },
         downloadOpenwrt: {
             name: 'OpenWrt',
             component: DownloadOpenwrt,
             options: [
-                { name: '✅ Готово!', next: 'done' },
+                { name: '✅ Готово!', next: 'done', style: 'primary' },
             ],
         },
         downloadXrayClientConfig: {
             name: 'Xray Client Config',
             component: DownloadXrayclient,
             options: [
-                { name: '✅ Готово!', next: 'done' },
+                { name: '✅ Готово!', next: 'done', style: 'primary' },
             ],
         },
         hiddifyPostInstallation: {
             name: 'Hiddify - после установки',
             component: HiddifyPostInstallation,
             options: [
-                { name: '✅ Нажми сюда, как сделаешь →', next: 'connect' },
+                { name: '✅ Нажми сюда, как сделаешь →', next: 'connect', style: 'primary' },
             ],
         },
         connect: {
             name: 'Подключение',
             component: Connect,
             options: [
-                { name: '✅ Нажми сюда как сделаешь →', next: 'done' },
+                { name: '✅ Нажми сюда как сделаешь →', next: 'done', style: 'primary' },
             ],
         },
         done: {
@@ -262,7 +273,7 @@
         <div class="uk-grid-small uk-child-width-1-1" class:uk-child-width-1-3@m={currentStep.options.length >= 3} class:uk-child-width-1-2@s={currentStep.options.length >= 3} uk-grid>
             {#each currentStep.options as option}
                 <div>
-                    <button class="uk-button uk-button-default uk-width-1-1 uk-text-middle" onclick={() => next(option.next)}>
+                    <button class="uk-button uk-button-{option.style || 'default'} uk-width-1-1 uk-text-middle" onclick={() => next(option.next)}>
                     {option.name}
                     </button>
                 </div>
