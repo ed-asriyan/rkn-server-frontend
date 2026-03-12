@@ -43,8 +43,8 @@
       try {
         supabase = await authSupabase(supabaseUrl, supabaseKey, uuid, $passwordStore);
 
-        usersService = new UsersService(supabase, usersStore, descendantsStore, uuid);
-        descendantsService = new DescendantsService(supabase, uuid, descendantsStore);
+        usersService = new UsersService(supabase, usersStore, descendantsStore);
+        descendantsService = new DescendantsService(supabase, descendantsStore);
         configsService = new ConfigsService(supabase, configsStore);
 
         await Promise.all([

@@ -11,10 +11,10 @@ export class ConfigsService {
   }
 
   async fetch(): Promise<void> {
-    const { data, error } = await this.supabase.from('configs').select('*').single();
+    const { data, error } = await this.supabase.from('subscription_urls').select('*').single();
     if (error) {
         throw error;
     }
-    this.store.addOrUpdate(new Config(data.uuid));
+    this.store.addOrUpdate(new Config(data.id));
   }
 }

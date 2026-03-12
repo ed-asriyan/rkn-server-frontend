@@ -4,8 +4,8 @@ import type { DescendantsStore } from './descendants-store';
 
 
 const deserializeUser = (rawValue: any): User => ({
-    uuid: rawValue.uuid as string,
-    parentUuid: rawValue.parent_uuid as string,
+    uuid: rawValue['user_id'] as string,
+    parentUuid: rawValue['parent_id'] as string,
     createdAt: new Date(rawValue['created_at'] as string),
     name: rawValue.name as string,
 });
@@ -14,17 +14,15 @@ export class UsersService {
     private supabase: SupabaseClient;
     private usersStore: UsersStore;
     private descendantsStore: DescendantsStore;
-    private uuid: string;
 
-    constructor(supabase: SupabaseClient, usersStore: UsersStore, descendantsStore: DescendantsStore, uuid: string) {
+    constructor(supabase: SupabaseClient, usersStore: UsersStore, descendantsStore: DescendantsStore) {
         this.usersStore = usersStore;
         this.descendantsStore = descendantsStore;
-        this.uuid = uuid;
         this.supabase = supabase;
     }
 
     async fetch(): Promise<void> {
-        const { data, error } = await this.supabase.from('members').select('*', { count: 'exact' });
+        const { data, error } = await this.supabase.from('user_memberships').select('*', { count: 'exact' });
         if (error) {
             throw error;
         }
@@ -36,7 +34,7 @@ export class UsersService {
 
     async adopt(name: string): Promise<User> {
         const { data, error } = await this.supabase.functions.invoke('adopt', {
-            body: { parentUuid: this.uuid, name }
+            body: { name }
         });
         if (error) {
             throw error;
