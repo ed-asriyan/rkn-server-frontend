@@ -32,7 +32,7 @@
         });
     };
 
-    let shareLink = $derived(`${origin}#?uuid=${member?.uuid}`);
+    let shareLink = $derived(`${location.origin}/#/?uuid=${member?.id}`);
 
     const canShare: boolean = Boolean(navigator.share);
     const linkClick = function (): void {
@@ -52,7 +52,7 @@
         try {
             const newName = prompt('Введите новое имя:', member.name);
             if (newName) {
-                await usersService.rename(member.uuid, newName);
+                await usersService.rename(member.id, newName);
                 UIkit.notification('Имя изменено', { status: 'success' });
                 member = { ...member, name: newName };
             }

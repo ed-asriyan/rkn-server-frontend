@@ -1,5 +1,5 @@
 <script lang="ts">
-    const { uuid }: { uuid: string } = $props();
+    const { id }: { id: string } = $props();
 
     const manifest = $derived({
         name: "Anywhere VPN",
@@ -45,7 +45,7 @@
         shortcuts: [
             {
                 name: "Подключить ВПН",
-                url: `${location.origin}/#/${uuid}/instruction`,
+                url: `${location.origin}/#/${id}/instruction`,
                 icons: [
                     {
                         src: `${location.origin}/connect.png`,
@@ -55,7 +55,7 @@
             },
             {
                 name: "Поделиться ВПНом",
-                url: `${location.origin}/#/${uuid}/children`,
+                url: `${location.origin}/#/${id}/children`,
                 icons: [
                     {
                         src: `${location.origin}/share.png`,
@@ -64,7 +64,7 @@
                 ],
             },
         ],
-        "start_url": `${location.origin}/#/${uuid}`,
+        "start_url": `${location.origin}/#/${id}`,
         display: "standalone",
         "background_color": "#f4f4f4",
         "theme_color": "#f4f4f4",

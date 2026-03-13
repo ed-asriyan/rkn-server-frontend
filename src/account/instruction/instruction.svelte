@@ -7,10 +7,10 @@
 
     interface Props {
         config: Config,
-        uuid: string
+        id: string
     }
 
-    let { config, uuid }: Props = $props();
+    let { config, id }: Props = $props();
 
     const onConnectClick = function(): void {
         window.location.href = config.hiddifyOpenUrl;
@@ -128,7 +128,7 @@
                     <code>{config.hiddifySubscriptionUrl}</code>
                 </p>
                 <p class="uk-text-center">
-                    <button class="uk-button uk-button-primary" onclick={() => location.navigate(`/${uuid}/children`)}>Сделать ВПН для друга!</button>
+                    <button class="uk-button uk-button-primary" onclick={() => location.navigate(`/${id}/children`)}>Сделать ВПН для друга!</button>
                 </p>
             </div>
         </li>

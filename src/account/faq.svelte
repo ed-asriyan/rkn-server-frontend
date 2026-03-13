@@ -3,21 +3,21 @@
     import LogoEmoji from '../components/logo-emoji.svelte';
     import { supportTelegramLink, supportSimplexLink } from '../config';
 
-    let { uuid }: { uuid: string } = $props();
+    let { id }: { id: string } = $props();
 </script>
 
 <h1 class="uk-heading-small uk-text-center"><LogoEmoji/>&nbsp;&nbspAnywhere VPN</h1>
-<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => location.navigate(`/${uuid}`) }>🏠 На главную</button>
+<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => location.navigate(`/${id}`) }>🏠 На главную</button>
 
 <h2>FAQ</h2>
 <div class="uk-child-width-1-2@m" uk-grid>
     <div>
         <h4>Друг/девушка/жена/мама тоже хочет впн. Могу дать свою ссылку?</h4>
-        <div>Нет, свою ссылку никому давать нельзя. Чтобы сгенерировать персональный ВПН для знакомого, <a href="#/{uuid}/children">нажми сюда</a>.</div>
+        <div>Нет, свою ссылку никому давать нельзя. Чтобы сгенерировать персональный ВПН для знакомого, <a href="#/{id}/children">нажми сюда</a>.</div>
     </div> 
     <div>
         <h4>У меня есть впн для телефона. Можно его поставить на комп?</h4>
-        <div>Да. <a href="#/${uuid}/instruction">Тут</a> ссылки на скачивания для windows и других платформ. Конфигурацию можешь использовать ту же, что используете на телефоне. Главное, не перепутай, какую конфигурацию ты используешь, а какая выдана друзьям.</div>
+        <div>Да. <a href="#/${id}/instruction">Тут</a> ссылки на скачивания для windows и других платформ. Конфигурацию можешь использовать ту же, что используете на телефоне. Главное, не перепутай, какую конфигурацию ты используешь, а какая выдана друзьям.</div>
     </div>
     <div>
         <h4>ВПН перестал работать/начал барахлить/не грузит/... Что делать?</h4>

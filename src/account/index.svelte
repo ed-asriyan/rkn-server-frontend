@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Router, Route } from '@svelte-router/core';
   import SignIn from './sign-in.svelte';
-  import { authSupabase, passwordStore, uuidStore } from '../stores/auth';
+  import { authSupabase, passwordStore, idStore } from '../stores/auth';
   import { supabaseKey, supabaseUrl, version } from '../config';
   import Home from "./home.svelte";
   import Instruction from "./instruction/index.svelte";
@@ -17,10 +17,10 @@
   import { ConfigsService } from "../stores/configs-service";
 
   interface Params {
-    uuid: string;
+    id: string;
   }
-  const { uuid }: Params = $props();
-  $uuidStore = uuid;
+  const { id }: Params = $props();
+  $idStore = id;
 
   let supabase: SupabaseClient | null = $state(null);
 
@@ -33,15 +33,15 @@
   let configsService: ConfigsService | null = $state(null);
 
   let firstLoad = true;
-  let didTryUuid = false;
+  let didTryId = false;
 
-  const login = async function(uuid: string): Promise<void> {
+  const login = async function(id: string): Promise<void> {
     if (!$passwordStore) {
-      didTryUuid = true;
-      setTimeout(() => $passwordStore = uuid, 100);
+      didTryId = true;
+      setTimeout(() => $passwordStore = id, 100);
     } else if (!supabase) {
       try {
-        supabase = await authSupabase(supabaseUrl, supabaseKey, uuid, $passwordStore);
+        supabase = await authSupabase(supabaseUrl, supabaseKey, id, $passwordStore);
 
         usersService = new UsersService(supabase, usersStore, descendantsStore);
         descendantsService = new DescendantsService(supabase, descendantsStore);
@@ -54,9 +54,9 @@
         ]);
       } catch (e) {
         console.error(e);
-        if (!didTryUuid) {
-          didTryUuid = true;
-          setTimeout(() => $passwordStore = uuid, 100);
+        if (!didTryId) {
+          didTryId = true;
+          setTimeout(() => $passwordStore = id, 100);
         } else if (firstLoad) {
           firstLoad = false;
         } else {
@@ -72,30 +72,30 @@
     <div class="uk-container uk-container-xsmall">
       <div class="uk-flex uk-flex-center uk-flex-middle" style="min-height: 100vh;">
         {#key $passwordStore}
-          {#await login(uuid)}
+          {#await login(id)}
             <div uk-spinner="ratio: 1" class="uk-margin-right"></div>
             Думаю думалку...
           {:then _}
             {#if supabase && usersService && descendantsService && configsService}
-              <Pwa uuid={uuid} />
+              <Pwa id={id} />
               <div>
                 <Router>
-                  <Route key="home" path="/:uuid">
-                    <Home uuid={uuid} {descendantsStore} {supabase} />
+                  <Route key="home" path="/:id">
+                    <Home id={id} {descendantsStore} {supabase} />
                   </Route>
-                  <Route key="instruction" path="/:uuid/instruction">
-                    <Instruction uuid={uuid} {configsStore} />
+                  <Route key="instruction" path="/:id/instruction">
+                    <Instruction id={id} {configsStore} />
                   </Route>
-                  <Route key="children" path="/:uuid/children">
-                    <Children uuid={uuid} {descendantsStore} {usersStore} {usersService} />
+                  <Route key="children" path="/:id/children">
+                    <Children id={id} {descendantsStore} {usersStore} {usersService} />
                   </Route>
-                  <Route key="faq" path="/:uuid/faq">
-                    <Faq uuid={uuid} />
+                  <Route key="faq" path="/:id/faq">
+                    <Faq id={id} />
                   </Route>
                 </Router>
 
                 <div class="uk-text-center uk-margin-large-top uk-text-small">
-                  User ID:<br/><b>{uuid}</b>
+                  User ID:<br/><b>{id}</b>
                 </div>
                 <div class="uk-text-center uk-margin-top uk-margin-bottom uk-text-small">
                   Website version:<br/><b>{version}</b>

@@ -1,11 +1,11 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { derived, writable, type Readable, type Writable } from 'svelte/store';
 
-export const authSupabase = async function (supabaseUrl: string, supabaseKey: string, uuid: string, password: string): Promise<SupabaseClient> {
+export const authSupabase = async function (supabaseUrl: string, supabaseKey: string, userId: string, password: string): Promise<SupabaseClient> {
     const supabase = createClient(supabaseUrl, supabaseKey);
     await supabase.auth.signOut({ scope: 'local' });
     await supabase.auth.signInWithPassword({
-        email: `${uuid}@example.com`,
+        email: `${userId}@example.com`,
         password,
     });
     if (!(await supabase.auth.getUser()).data.user) {
@@ -37,5 +37,5 @@ export const changePassword = async function(supabase: SupabaseClient, password:
 };
 
 export const passwordStore = createLocalStorageStore('password', '');
-export const uuidStore = createLocalStorageStore('uuid', '');
-export const isPasswordDefaultStore: Readable<boolean> = derived([passwordStore, uuidStore], ([password, uuid]) => password === uuid);
+export const idStore = createLocalStorageStore('id', '');
+export const isPasswordDefaultStore: Readable<boolean> = derived([passwordStore, idStore], ([password, id]) => password === id);

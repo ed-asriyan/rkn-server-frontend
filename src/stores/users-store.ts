@@ -1,14 +1,14 @@
 import { AbstractStore } from './abstract-store';
 
 export interface User {
-    uuid: string;
-    parentUuid: string;
+    id: string;
+    parentId: string;
     createdAt: Date;
     name: string;
 }
 
-export class UsersStore extends AbstractStore<User, 'uuid'> {
+export class UsersStore extends AbstractStore<User, 'id'> {
   constructor() {
-    super(['uuid'], []);
+    super(['id'], []);
   }
 }

@@ -3,15 +3,21 @@
   import { Router, Route, location } from '@svelte-router/core';
   import 'uikit/dist/js/uikit';
   import Account from './account/index.svelte';
-  import { uuidStore } from './stores/auth';
+  import { idStore } from './stores/auth';
 
   onMount(() => {
     const hash = window.location.hash.replace('#/', '').replace('#', '');
     if (!hash) {
-      if ($uuidStore) {
-        location.navigate(`/#/${$uuidStore}`);
+      if ($idStore) {
+        location.navigate(`/#/${$idStore}`);
       } else {
-          window.location.href = origin;
+        window.location.href = origin;
+      }
+    } else {
+      const searchParams = new URLSearchParams(hash);
+      if (searchParams.has('uuid')) {
+          const id = searchParams.get('uuid')!;
+          window.location.href = `/#/${id}`;
       }
     }
   });
@@ -22,10 +28,10 @@
 </svelte:head>
 
 <Router>
-  <Route key="account" path="/:uuid/*">
+  <Route key="account" path="/:id/*">
     {#snippet children({ rp })}
-      {#if rp?.uuid}
-        <Account uuid={rp!.uuid as string} />
+      {#if rp?.id}
+        <Account id={rp!.id as string} />
       {/if}
     {/snippet}
   </Route>

@@ -6,16 +6,16 @@
     import type { User, UsersStore } from '../../stores/users-store';
     import type { UsersService } from '../../stores/users-service';
     import type { DescendantsStore } from '../../stores/descendants-store';
-  import type { Readable } from 'svelte/store';
+    import type { Readable } from 'svelte/store';
 
     interface Props {
-        uuid: string;
+        id: string;
         usersStore: UsersStore;
         descendantsStore: DescendantsStore;
         usersService: UsersService;
     }
 
-    const { uuid, usersStore, descendantsStore, usersService }: Props = $props();
+    const { id, usersStore, descendantsStore, usersService }: Props = $props();
 
     let children: Readable<User[]> = $derived(usersStore.items);
     let descendantsCount: Readable<number> = $derived(descendantsStore.count);
@@ -63,7 +63,7 @@
 <ChildModal bind:member={userModal} {usersService} />
 
 <h1 class="uk-heading-small uk-text-center"><LogoEmoji/>&nbsp;&nbspAnywhere VPN</h1>
-<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => location.navigate(`/${uuid}`) }>🏠 На главную</button>
+<button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" onclick={() => location.navigate(`/${id}`) }>🏠 На главную</button>
 
 <p>
     Вы можете создавать VPN для семьи, друзей и других людей.
@@ -81,7 +81,7 @@
             Вы ещё не поделились VPN, но всё впереди!
         </p>  
         <p class="uk-text-bold uk-text-emphasis">
-             Помоги друзьям и семье — создай им ВПН и преврати 0 в 1, 2, 10... и даже 100+! 🚀
+            Помоги друзьям и семье — создай им ВПН и преврати 0 в 1, 2, 10... и даже 100+! 🚀
         </p>
     {:else}
         {#if $descendantsCount === $children.length}
@@ -124,7 +124,7 @@
                         <td>
                             <button class="uk-button uk-button-secondary uk-button-small uk-text-truncate" onclick={() => userModal = child}>Открыть</button>
                             &nbsp;
-                            <span class="uk-text-truncate uk-button uk-link uk-text-primary uk-text-bold" onclick={() => userModal = child}>{child.name || child.uuid}</span>
+                            <span class="uk-text-truncate uk-button uk-link uk-text-primary uk-text-bold" onclick={() => userModal = child}>{child.name || child.id}</span>
                         </td>
                         <td>{child.createdAt.toLocaleString()}</td>
                     </tr>

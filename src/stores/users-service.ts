@@ -4,8 +4,8 @@ import type { DescendantsStore } from './descendants-store';
 
 
 const deserializeUser = (rawValue: any): User => ({
-    uuid: rawValue['user_id'] as string,
-    parentUuid: rawValue['parent_id'] as string,
+    id: rawValue['user_id'] as string,
+    parentId: rawValue['parent_id'] as string,
     createdAt: new Date(rawValue['created_at'] as string),
     name: rawValue.name as string,
 });
@@ -50,11 +50,11 @@ export class UsersService {
     }
 
     async rename(uuid: string, name: string): Promise<void> {
-        const { error } = await this.supabase.from('members').update({ name }).eq('uuid', uuid);
+        const { error } = await this.supabase.from('members').update({ name }).eq('id', uuid);
         if (error) {
             throw error;
         }
-        const user: User | null = this.usersStore.getBy('uuid', uuid).get();
+        const user: User | null = this.usersStore.getBy('id', uuid).get();
         if (user) {
            this.usersStore.addOrUpdate({ ...user, name });
         } else {

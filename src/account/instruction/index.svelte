@@ -17,7 +17,7 @@
     import Connect from './connect.svelte';
     import type { ConfigsStore } from '../../stores/configs-store';
 
-    let { uuid, configsStore }: { uuid: string, configsStore: ConfigsStore } = $props();
+    let { id, configsStore }: { id: string, configsStore: ConfigsStore } = $props();
 
     let allConfigs = $derived(configsStore.items);
     let config = $derived($allConfigs[0]);
@@ -259,7 +259,7 @@
 </script>
 
 <h1 class="uk-heading-small uk-text-center"><LogoEmoji/>&nbsp;&nbspAnywhere VPN</h1>
-<button class="uk-button uk-button-default uk-width-1-1 uk-margin" onclick={() => location.navigate(`/${uuid}`) }>🏠 На главную</button>
+<button class="uk-button uk-button-default uk-width-1-1 uk-margin" onclick={() => location.navigate(`/${id}`) }>🏠 На главную</button>
 
 <div class="uk-padding uk-card uk-card-default uk-card-body">
     <h2 class="uk-text-center">{ currentStep.name }</h2>
@@ -267,7 +267,7 @@
         <p class="uk-text-center">{ currentStep.description }</p>
     {/if}
     {#if currentStep.component}
-        <svelte:component this={currentStep.component} {config} {uuid} />
+        <svelte:component this={currentStep.component} {config} {id} />
     {/if}
     {#if currentStep.options}
         <div class="uk-grid-small uk-child-width-1-1" class:uk-child-width-1-3@m={currentStep.options.length >= 3} class:uk-child-width-1-2@s={currentStep.options.length >= 3} uk-grid>
