@@ -10,8 +10,6 @@
     if (!hash) {
       if ($idStore) {
         location.navigate(`/#/${$idStore}`);
-      } else {
-        window.location.href = origin;
       }
     } else {
       const searchParams = new URLSearchParams(hash);
