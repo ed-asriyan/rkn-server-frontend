@@ -8,7 +8,7 @@
     import DownloadIos from './download-ios.svelte';
     import DownloadOpenwrt from './download-openwrt.svelte';
     import DownloadXrayclient from './download-xrayclient.svelte';
-    import DownloadIosTroubleshoot from './download-ios-troubleshoot.svelte';
+    import DownloadIosCountryChange from './download-ios-country-change.svelte';
     import HiddifyPostInstallation from './hiddify-post-installation.svelte';
     import DownloadMacos from './download-macos.svelte';
     import DownloadMacsTroubleshoot from './download-macs-troubleshoot.svelte';
@@ -25,8 +25,7 @@
     type Steps =
         'selectDevice' |
         'downloadIos' |
-        'downloadIosTroubleshoot' |
-        'downloadIosAfterCountryChange' |
+        'downloadIosCountryChange' |
         'downloadAppleTv' |
         'downloadAndroid' |
         'downloadAndroidTv' |
@@ -61,7 +60,7 @@
             options: [
                 { 
                     name: '📱 iPhone/iPad',
-                    next: 'downloadIos',
+                    next: 'downloadIosCountryChange',
                     style: 'default',
                 },
                 { 
@@ -131,21 +130,14 @@
             component: DownloadIos,
             options: [
                 { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation', style: 'primary' },
-                { name: '⛔ Нажми сюда, если приложение не доступно в моей стране', next: 'downloadIosTroubleshoot', style: 'danger' },
+                { name: '⛔ Нажми сюда, если приложение не доступно в моей стране', next: 'downloadIosCountryChange', style: 'danger' },
             ],
         },
-        downloadIosTroubleshoot: {
-            name: 'iOS - Не доступно',
-            component: DownloadIosTroubleshoot,
+        downloadIosCountryChange: {
+            name: 'iOS - Смена страны',
+            component: DownloadIosCountryChange,
             options: [
-                { name: '✅ Нажми сюда, как установишь →', next: 'downloadIosAfterCountryChange', style: 'primary' },
-            ],
-        },
-        downloadIosAfterCountryChange: {
-            name: 'iOS - После смены страны',
-            component: DownloadIos,
-            options: [
-                { name: '✅ Нажми сюда, как установишь →', next: 'hiddifyPostInstallation', style: 'primary' },
+                { name: '✅ Нажми сюда, как поменяешь страну →', next: 'downloadIos', style: 'primary' },
             ],
         },
         downloadAppleTv: {
