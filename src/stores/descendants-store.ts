@@ -1,12 +1,12 @@
 import { atom, computed, type ReadableAtom, type WritableAtom } from 'nanostores';
 
 export class DescendantsStore {
-  private readonly _count: WritableAtom<number> = atom<number>(0);
+  private readonly _count: WritableAtom<number | null> = atom<number | null>(null);
 
-  readonly count: ReadableAtom<number> = computed(this._count, (count) => count);
+  readonly count: ReadableAtom<number | null> = computed(this._count, (count) => count);
 
   increase (): void {
-    this._count.set(this._count.get() + 1);
+    this._count.set((this._count.get() || 0) + 1);
   }
 
   set(count: number): void {

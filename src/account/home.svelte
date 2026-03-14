@@ -50,7 +50,13 @@
   <div>
     <div class="uk-card uk-card-secondary uk-card-hover uk-card-body uk-card-small cursor uk-text-left" onclick={() => location.navigate(`/${id}/children`)}>
       <h5 class="uk-card-title">👥&nbsp;&nbsp;Поделиться ВПНом</h5>
-      <p>Вы <b>разблокировали</b> интернет <b>{ $count }</b> людям</p>
+      <p>Вы <b>разблокировали</b> интернет
+        {#if $count === null}
+          <div class="uk-spinner uk-margin-small-left" uk-spinner="ratio: 0.5"></div>
+        {:else}
+          для <b>{$count} {$count === 1 ? 'человека' : 'человек'}</b>
+        {/if}
+      </p>
     </div>
   </div>
   <div>
